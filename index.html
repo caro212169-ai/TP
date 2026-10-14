@@ -1,0 +1,1092 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#58CC02">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lexique">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Lexique pâtisserie</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+/* Layout : appli mobile type « parcours » ; barre de stats en haut, navigation en bas, leçons plein écran */
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --ink:#3C3C3C; --muted:#777777; --line:#E5E5E5; --sunk:#F7F7F7;
+  --green:#58CC02; --green-d:#46A302; --green-soft:#D7FFB8; --green-ink:#58A700;
+  --blue:#1CB0F6; --blue-d:#1899D6; --blue-soft:#DDF4FF; --blue-ink:#1899D6;
+  --red:#FF4B4B; --red-d:#EA2B2B; --red-soft:#FFDFE0; --red-ink:#EA2B2B;
+  --orange:#FF9600; --orange-d:#E08600; --orange-soft:#FFF0D9;
+  --purple:#CE82FF; --purple-d:#A568CC; --purple-soft:#F4E5FF;
+  --pink:#FF86D0; --pink-d:#E070B5; --yellow:#FFC800; --yellow-d:#E5A900; --yellow-soft:#FFF5D1;
+  --font:"Nunito",ui-rounded,"Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#131F24;--surface:#131F24;--ink:#F1F7FB;--muted:#93A8B3;--line:#37464F;--sunk:#1B2B32;
+  --green-soft:#1F3A12;--green-ink:#79D634;--blue-soft:#12324A;--blue-ink:#49C0F8;--red-soft:#3D1E22;--red-ink:#FF7878;
+  --orange-soft:#3B2A12;--purple-soft:#2F2140;--yellow-soft:#3A3212;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131F24;--surface:#131F24;--ink:#F1F7FB;--muted:#93A8B3;--line:#37464F;--sunk:#1B2B32;
+  --green-soft:#1F3A12;--green-ink:#79D634;--blue-soft:#12324A;--blue-ink:#49C0F8;--red-soft:#3D1E22;--red-ink:#FF7878;
+  --orange-soft:#3B2A12;--purple-soft:#2F2140;--yellow-soft:#3A3212;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.45;font-weight:600}
+button{font-family:var(--font)}
+h1,h2,h3{margin:0;font-weight:900;text-wrap:balance}
+p{margin:0}
+.muted{color:var(--muted)} .small{font-size:.85rem}
+.wrap{max-width:600px;margin:0 auto;padding-block:0 110px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Barre du haut */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--bg);border-bottom:2px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;margin-bottom:16px}
+.stat{display:flex;align-items:center;gap:5px;font-weight:900;font-size:1.05rem;font-variant-numeric:tabular-nums;background:none;border:0;color:inherit;cursor:pointer;padding:4px}
+.stat svg{width:26px;height:26px}
+.s-fire{color:var(--orange)} .s-fire.off{color:var(--muted)} .s-gem{color:var(--blue)} .s-star{color:var(--green)} .s-xp{color:var(--yellow-d)}
+
+/* Navigation du bas */
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:7;background:var(--bg);border-top:2px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+.bottom .in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:6px 0}
+.bottom button{background:none;border:2px solid transparent;border-radius:14px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-weight:800;font-size:.7rem;text-transform:uppercase;letter-spacing:.03em;cursor:pointer}
+.bottom button svg{width:28px;height:28px}
+.bottom button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-ink)}
+
+/* Boutons 3D */
+.b3{--c:var(--green);--cd:var(--green-d);background:var(--c);color:#fff;border:0;border-bottom:4px solid var(--cd);border-radius:16px;font-weight:900;font-size:1rem;text-transform:uppercase;letter-spacing:.05em;padding:13px 18px;cursor:pointer;width:100%;transition:transform .05s}
+.b3:active{transform:translateY(2px);border-bottom-width:2px}
+.b3[disabled]{--c:var(--line);--cd:var(--line);color:var(--muted);cursor:default}
+.b3.blue{--c:var(--blue);--cd:var(--blue-d)} .b3.red{--c:var(--red);--cd:var(--red-d)} .b3.orange{--c:var(--orange);--cd:var(--orange-d)} .b3.purple{--c:var(--purple);--cd:var(--purple-d)}
+.b3.ghost{background:var(--surface);color:var(--blue-ink);border:2px solid var(--line);border-bottom-width:4px}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* Parcours */
+.unit{border-radius:16px;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 0 10px;border-bottom:4px solid rgba(0,0,0,.18)}
+.unit small{display:block;font-weight:800;opacity:.9;text-transform:uppercase;letter-spacing:.06em;font-size:.75rem}
+.unit h2{font-size:1.2rem}
+.unit .mini{width:52px;height:52px;flex:0 0 auto}
+.path{display:flex;flex-direction:column;align-items:center;gap:18px;padding:10px 0 4px;position:relative}
+.node{position:relative;width:72px;height:66px;border-radius:50%;border:0;cursor:pointer;background:var(--c,var(--line));box-shadow:0 7px 0 var(--cd,#C8C8C8);display:grid;place-items:center;color:#fff;transition:transform .08s}
+.node svg{width:34px;height:34px}
+.node:active{transform:translateY(4px);box-shadow:0 3px 0 var(--cd)}
+.node.locked{--c:var(--line);--cd:#CFCFCF;color:#AFAFAF;cursor:pointer}
+:root[data-theme="dark"] .node.locked{--cd:#2A363C}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .node.locked{--cd:#2A363C}}
+.node.gold{--c:var(--yellow);--cd:var(--yellow-d)}
+.node.trophy{width:84px;height:76px}
+.ringwrap{position:relative;display:grid;place-items:center}
+.ringwrap svg.ring{position:absolute;width:98px;height:98px;top:50%;left:50%;transform:translate(-50%,-46%) rotate(-90deg)}
+.bubble{position:absolute;bottom:calc(100% + 16px);left:50%;transform:translateX(-50%);background:var(--surface);border:2px solid var(--line);color:var(--c2,var(--green-ink));font-weight:900;text-transform:uppercase;font-size:.85rem;letter-spacing:.05em;padding:8px 14px;border-radius:12px;white-space:nowrap;animation:bob 1.6s ease-in-out infinite}
+.bubble::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:var(--line)}
+@keyframes bob{50%{transform:translate(-50%,-5px)}}
+.side-m{position:absolute;width:96px}
+
+/* Cartes et listes */
+.panel{border:2px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.panel h2{font-size:1.2rem}
+.tile{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;padding:12px;background:var(--surface);cursor:pointer;color:inherit;text-align:left;width:100%}
+.tile .ic{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;color:#fff}
+.tile .ic svg{width:32px;height:32px}
+.tile b{display:block;font-size:1.05rem;font-weight:900}
+.tile span{color:var(--muted);font-size:.88rem}
+.tiles{display:flex;flex-direction:column;gap:10px}
+.qbar{height:16px;background:var(--line);border-radius:99px;overflow:hidden;position:relative}
+.qbar i{display:block;height:100%;background:var(--yellow);border-radius:99px}
+.qbar span{position:absolute;inset:0;display:grid;place-items:center;font-size:.72rem;font-weight:900;color:var(--ink)}
+.quest{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:12px;align-items:center;padding:6px 0}
+.quest b{display:block;margin-bottom:6px}
+.chest{width:44px;height:44px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-weight:800;font-size:.85rem;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:5px 11px;cursor:pointer;min-width:38px}
+.chip[aria-pressed="true"]{background:var(--blue-soft);border-color:var(--blue);color:var(--blue-ink)}
+.big{font-size:3rem;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.ladder{display:flex;flex-direction:column;gap:6px}
+.rung{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 12px;border-radius:14px;border:2px solid var(--line)}
+.rung.on{background:var(--green-soft);border-color:var(--green)} .rung.cur{background:var(--yellow-soft);border-color:var(--yellow)}
+.rung i{font-style:normal;font-weight:900;text-align:center}
+.letters{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:8px}
+.lt{border:2px solid var(--line);border-radius:12px;padding:6px;text-align:center;position:relative;overflow:hidden}
+.lt .f{position:absolute;left:0;right:0;bottom:0;background:var(--green-soft)}
+.lt b{position:relative;font-size:1.3rem;display:block;font-weight:900}
+.lt small{position:relative;font-variant-numeric:tabular-nums;color:var(--muted)}
+.lt.full{border-color:var(--green)} .lt.full b{color:var(--green-ink)}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.bd{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}
+.bd .medal{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:var(--line);color:var(--muted);border-bottom:4px solid rgba(0,0,0,.15)}
+.bd .medal svg{width:30px;height:30px}
+.bd.on .medal{background:var(--c);color:#fff}
+.bd b{font-size:.82rem;line-height:1.15} .bd small{font-size:.72rem;color:var(--muted);line-height:1.2}
+.bd:not(.on){opacity:.6}
+.wl .wi{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:8px 2px;border-bottom:2px solid var(--line);align-items:center}
+.wl small{color:var(--muted)}
+.pill{border-radius:99px;padding:2px 10px;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.03em}
+.p0{background:var(--line);color:var(--muted)} .p1{background:var(--red-soft);color:var(--red-ink)} .p2,.p3{background:var(--orange-soft);color:var(--orange-d)} .p4,.p5{background:var(--green-soft);color:var(--green-ink)}
+.fam p.tip{background:var(--yellow-soft);border-radius:12px;padding:10px 12px;font-size:.95rem}
+.fam dl{margin:0;display:grid;grid-template-columns:minmax(0,9em) minmax(0,1fr);gap:8px 12px}
+.fam dt{font-weight:900} .fam dd{margin:0;color:var(--muted);font-size:.95rem}
+.fam.hide dd{color:transparent;background:var(--line);border-radius:8px;cursor:pointer}
+.fam.hide dd *{visibility:hidden}
+@media (max-width:420px){.fam dl{grid-template-columns:1fr}.fam dd{margin-bottom:6px}}
+ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px}
+.week{display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:2px solid var(--line)}
+.week .d{font-weight:900;color:var(--blue-ink)}
+.week.now .d{color:var(--green-ink)}
+.linkbtn{background:none;border:0;color:var(--red-ink);font-weight:800;font-size:.85rem;cursor:pointer;padding:0;text-decoration:underline}
+.shopitem{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center}
+.price{display:flex;align-items:center;gap:4px;font-weight:900;color:var(--blue-ink)}
+.price svg{width:20px;height:20px}
+.smallbtn{width:auto;padding:9px 14px;font-size:.85rem}
+
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.cal b{font-size:.75rem;color:var(--muted)}
+.cd{aspect-ratio:1;max-width:100%;display:grid;place-items:center;border-radius:50%;font-size:.85rem;font-weight:800;color:var(--muted)}
+.cd svg{width:60%;height:60%}
+.cd.on{background:var(--orange);color:#fff}
+.cd.fr{background:var(--blue-soft);color:var(--blue-ink)}
+.cd.today{box-shadow:0 0 0 2px var(--ink) inset}
+.cd.on.today{box-shadow:0 0 0 3px var(--orange-d) inset}
+/* Leçon */
+.lesson{min-height:100%;display:flex;flex-direction:column;gap:18px;padding-top:14px}
+.lhead{display:flex;align-items:center;gap:12px}
+.x{background:none;border:0;color:var(--muted);cursor:pointer;padding:4px;display:grid}
+.x svg{width:26px;height:26px}
+.lbar{flex:1;height:16px;background:var(--line);border-radius:99px;overflow:hidden}
+.lbar i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .35s;box-shadow:inset 0 -5px 0 rgba(0,0,0,.08),inset 0 4px 0 rgba(255,255,255,.35)}
+.combo{color:var(--orange);font-weight:900;font-size:.95rem;white-space:nowrap}
+.kicker{font-weight:900;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;display:inline-flex;align-items:center;gap:6px;color:var(--purple-d)}
+.kicker.new{color:var(--purple-d)} .kicker.rev{color:var(--orange-d)}
+.prompt{font-size:1.45rem;font-weight:900;line-height:1.2}
+.speech{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:end}
+.speech .say{position:relative;border:2px solid var(--line);border-radius:16px;padding:14px;font-size:1.08rem}
+.speech .say::before{content:"";position:absolute;left:-10px;bottom:22px;width:16px;height:16px;background:var(--bg);border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}
+.wordbig{font-size:2.3rem;font-weight:900;line-height:1.05;overflow-wrap:anywhere;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.spk{background:var(--blue);color:#fff;border:0;border-bottom:4px solid var(--blue-d);border-radius:14px;width:48px;height:44px;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.spk svg{width:26px;height:26px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts.one{grid-template-columns:1fr}
+.opt{border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;background:var(--surface);color:var(--ink);font-weight:800;font-size:1.05rem;padding:14px 12px;cursor:pointer;text-align:center;min-height:62px}
+.opts.one .opt{text-align:left;font-size:.95rem;font-weight:700}
+.opt[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-ink)}
+.opt.ok{border-color:var(--green);background:var(--green-soft);color:var(--green-ink)}
+.opt.ko{border-color:var(--red);background:var(--red-soft);color:var(--red-ink)}
+.opt.done{opacity:.35;cursor:default}
+input[type=text]{width:100%;font:800 1.3rem var(--font);padding:14px 16px;border-radius:16px;border:2px solid var(--line);background:var(--sunk);color:var(--ink)}
+.hintbtn{align-self:flex-start;background:none;border:0;color:var(--blue-ink);font-weight:900;text-transform:uppercase;font-size:.85rem;letter-spacing:.05em;cursor:pointer;padding:0}
+.clair{background:var(--green-soft);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:.98rem}
+.clair b{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--green-ink)}
+.gl{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline dotted var(--blue);text-decoration-thickness:2px;text-underline-offset:3px}
+.glbox{background:var(--blue-soft);border-radius:12px;padding:8px 12px;font-size:.92rem;margin:0}
+.vid{color:var(--blue-ink);font-weight:900;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.vid svg{width:20px;height:20px}
+.def{font-size:1.1rem}
+.lfoot{margin-top:auto;padding-top:10px}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:8;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));transform:translateY(105%);transition:transform .22s ease}
+.sheet.show{transform:none}
+.sheet .in{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.sheet.ok{background:var(--green-soft)} .sheet.ko{background:var(--red-soft)}
+.sheet h3{font-size:1.4rem;display:flex;align-items:center;gap:10px}
+.sheet h3 svg{width:34px;height:34px;flex:0 0 auto}
+.sheet.ok h3,.sheet.ok .t{color:var(--green-ink)} .sheet.ko h3,.sheet.ko .t{color:var(--red-ink)}
+.sheet .scroll{max-height:34vh;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.pairs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:10px}
+.pairs .col{display:flex;flex-direction:column;gap:10px}
+.pc{border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;background:var(--surface);color:var(--ink);padding:10px;cursor:pointer;font-weight:700;font-size:.85rem;text-align:left;min-height:56px}
+.pc.w{font-weight:900;font-size:1rem;text-align:center}
+.pc.sel{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-ink)}
+.pc.done{border-color:var(--line);color:var(--line);background:var(--surface);cursor:default}
+.pc.bad{border-color:var(--red);background:var(--red-soft)}
+.endscreen{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;padding-top:30px}
+.endscreen h1{font-size:2rem;color:var(--yellow-d)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+.kpi{border:2px solid var(--c);border-radius:16px;overflow:hidden}
+.kpi small{display:block;background:var(--c);color:#fff;font-weight:900;text-transform:uppercase;font-size:.7rem;letter-spacing:.06em;padding:4px}
+.kpi b{display:block;padding:10px 4px;font-size:1.3rem;font-weight:900;color:var(--c);font-variant-numeric:tabular-nums}
+.timer{font-weight:900;font-size:1.4rem;color:var(--orange);font-variant-numeric:tabular-nums}
+
+/* Toasts et effets */
+#toast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translate(-50%,-160%);background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;padding:10px 14px;max-width:min(92vw,420px);z-index:20;transition:transform .35s ease;display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center}
+#toast.show{transform:translate(-50%,0)}
+#toast b{display:block;font-weight:900}
+#toast span{font-size:.88rem;color:var(--muted)}
+#toast .ti{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:#fff}
+#toast .ti svg{width:28px;height:28px}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:19;width:100%;height:100%}
+.pop{animation:pop .35s ease}
+@keyframes pop{40%{transform:scale(1.08)}}
+.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.wiggle{animation:wig 2.4s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes wig{0%,100%{transform:rotate(0)}10%{transform:rotate(-6deg)}20%{transform:rotate(6deg)}30%{transform:rotate(0)}}
+@media (prefers-reduced-motion:reduce){.pop,.shake,.wiggle,.bubble{animation:none}.sheet,#toast{transition:none}}
+</style>
+
+</head>
+<body>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div id="toast" role="status" aria-live="polite"></div>
+<div class="wrap" id="app"></div>
+<nav class="bottom" id="nav"><div class="in">
+  <button data-tab="learn" aria-pressed="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 9l10 6 8-4.8V16h2V9z"/><path d="M6 13.2V17c0 1.7 2.7 3 6 3s6-1.3 6-3v-3.8l-6 3.6z"/></svg>Apprendre</button>
+  <button data-tab="train" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Entraîner</button>
+  <button data-tab="quests" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M3 5h18v4H3z" opacity=".7"/><rect x="10" y="9" width="4" height="5" rx="1" fill="#fff" opacity=".85"/></svg>Quêtes</button>
+  <button data-tab="fam" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-4 12.7V18h8v-3.3A7 7 0 0 0 12 2z"/><rect x="9" y="19" width="6" height="3" rx="1"/></svg>Pièges</button>
+  <button data-tab="profile" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4.5"/><path d="M3 21c0-4.4 4-7 9-7s9 2.6 9 7z"/></svg>Profil</button>
+</div></nav>
+<div class="sheet" id="sheet" aria-live="polite"><div class="in" id="sheetIn"></div></div>
+
+<script>
+const RAW = [
+["Abaisser","Étendre, aplatir une pâte au rouleau, à l'épaisseur voulue.",1],
+["Abricoter","Étaler à l'aide d'un pinceau une couche plus ou moins épaisse de nappage blond sur une préparation pour donner un aspect brillant.",0],
+["Appareil","Mélange de plusieurs substances entrant dans la composition d'une préparation de recette de pâtisserie avant la cuisson.",1],
+["Apprêt","Période de fermentation d'une pâte levée se situant entre le façonnage et la cuisson.",1],
+["Aromates","Herbes, plantes ou racines répandant une saveur pénétrante (vanille, café, cannelle…).",0],
+["Bain-marie","Eau plus ou moins chaude, dans laquelle on place un récipient contenant une préparation à cuire ou à tenir chaud.",0],
+["Battre","Agiter vigoureusement une préparation à l'aide d'un fouet, soit pour mélanger, soit pour augmenter le volume.",0],
+["Beurre pommade","Beurre ramolli et amené à la consistance de pommade.",0],
+["Beurrer","Enduire un ustensile de beurre. Incorporer du beurre à une pâte avant le tourage.",0],
+["Blanchir","Travailler vigoureusement à l'aide d'un fouet des jaunes d'œufs et du sucre pour les rendre mousseux.",1],
+["Bouler","Rouler une pâte pour lui donner la forme d'une boule en donnant de la force à la pâte (brioche, pain…).",1],
+["Broyer","Écraser, concasser pour réduire en poudre à l'aide d'un rouleau ou d'une broyeuse certaines matières premières.",0],
+["Brûler","Les jaunes avec le sucre quand le mélange n'est pas fait aussitôt. Une pâte quand elle est trop travaillée ou pas assez hydratée. Quand un produit dépasse le stade de bien cuit.",0],
+["Buée","Vapeur d'eau produite au moment de la cuisson.",0],
+["Candir","Opération qui consiste à enrober les bonbons d'une couche de protection constituée de cristaux de sucre.",0],
+["Canneler","Incruster dans une pâte des rainures parallèles à l'aide d'un couteau spécial.",1],
+["Caraméliser","Enduire de sucre caramélisé une pâtisserie ou un moule. Brûler du sucre sur un gâteau avec un fer rouge ou une flamme.",0],
+["Chablon","Modèle découpé de différentes formes servant de calibre pour le dressage à la palette de cigarettes, feuilles, fonds…",0],
+["Chablonner","Mettre une fine couche de couverture de chocolat non mise au point sur les intérieurs chocolat avant de les découper et de les enrober.",0],
+["Chemiser","Appliquer à l'intérieur d'un moule, d'une caissette, une légère couche de chocolat, de glace, de papier, de caramel.",1],
+["Chiqueter","Taillader et marquer à l'aide d'un couteau le tour d'une pièce de feuilletage pour sa présentation et pour un développement plus régulier.",1],
+["Clarifier","Séparer le jaune du blanc d'un œuf.",0],
+["Coller","Ajouter de la gélatine à une préparation.",1],
+["Concasser","Hacher grossièrement.",0],
+["Concher","Travailler une couverture pour la rendre onctueuse, lisse et homogène.",0],
+["Confire","Remplacer l'eau des fruits par du sucre en vue de les conserver.",0],
+["Corner","Se servir d'une corne pour garnir, lisser ou enlever totalement une préparation d'une bassine ou d'un récipient.",0],
+["Corps","Élasticité, résistance d'une pâte après son pétrissage. Dû au gluten que contient la farine.",0],
+["Corser","Donner de l'élasticité à une pâte. Relever la saveur d'une crème ou d'une sauce.",1],
+["Coucher","Façonner des éclairs, des meringues… sur une plaque à pâtisserie à l'aide d'une poche munie d'une douille.",0],
+["Crémer","Rendre mousseux et crémeux un mélange de beurre et de sucre en le travaillant énergiquement.",0],
+["Décuire","Rajouter un liquide au cours de la cuisson d'un sucre pour le ramener à une température de cuisson inférieure.",0],
+["Dessécher","Déshydrater, faire évaporer l'humidité se trouvant dans une préparation sur le feu (pâte à choux), dans un four ou une étuve.",0],
+["Détailler","Découper des formes dans une abaisse de pâte avec un couteau ou un emporte-pièce.",1],
+["Détrempe","Mélange de farine, eau, sel en vue de la fabrication d'autres préparations (pâte feuilletée, croissant…).",0],
+["Développer","Augmentation, accroissement du volume d'une préparation, soit au cours d'une cuisson, soit lors de la fermentation.",0],
+["Dorer","Étaler un mélange d'œuf battu avec un pinceau pour donner un aspect brillant à certaines pâtes grâce à la cuisson.",0],
+["Dresser","Donner une forme à une pâte ou à un appareil à l'aide d'une poche ou d'un pochoir.",1],
+["Ébarber","Enlever les coulures de chocolat après le démoulage d'un sujet en chocolat.",1],
+["Écumer","Enlever les impuretés qui se forment à la surface de cuissons de sucre, confiture, beurre clarifié…",1],
+["Émonder","Enlever la peau des amandes, pêches, tomates…",1],
+["Émulsionner","Disperser un liquide dans un autre liquide avec lequel il ne se mélange pas.",1],
+["Enrober","Recouvrir entièrement un produit d'une fine couche protectrice (fondant, chocolat, caramel…).",1],
+["Étuver","Mettre un produit à l'étuve pour accélérer sa fermentation (pâtes levées) ou pour le sécher.",0],
+["Façonner","Donner une forme particulière en modelant avec les mains toutes sortes de pâtes.",0],
+["Fariner","Mettre une fine couche de farine sur un tour, une plaque, un moule…",0],
+["Ferme","Pâte assez dure et résistante. Blancs d'œufs montés en neige qui ne s'affaissent pas.",0],
+["Fleurer","Même sens que fariner, mais en mettant une couche encore plus fine.",0],
+["Foncer","Enfoncer la pâte dans un moule et lui faire épouser sa forme en garnissant le fond et les parois.",1],
+["Fond","Élément de base pour la confection d'un gâteau (fond de génoise, fond de tarte…).",1],
+["Fraser","Travailler une pâte pour la lisser sans lui donner de corps.",0],
+["Garnir","Remplir une préparation, un fond de gâteau, un moule, une poche…",0],
+["Glacer","Étaler un glaçage sur une surface bien définie. Rendre brillante une pâtisserie avec du sucre glace, du sirop, du fondant…",0],
+["Grainer","Modifier l'aspect d'une préparation qui perd son homogénéité : apparition de grains.",0],
+["Graisser","Enduire de graisse. Action d'ajouter un anti-cristallisant dans un sucre pour l'empêcher de masser.",0],
+["Homogénéiser","Rendre un produit lisse. Briser les particules apparentes d'un mélange pour obtenir une texture homogène.",0],
+["Huiler","Étaler une fine pellicule d'huile dans un moule ou sur un marbre. Se dit d'une pâte d'amandes qui rejette de l'huile.",0],
+["Imbiber","Humecter avec un sirop pour rendre moins sec et dans le but de parfumer.",1],
+["Intérieur","Préparation destinée à être enrobée.",0],
+["Lier","Épaissir un appareil en ajoutant de la farine, du jaune d'œuf, de la crème…",0],
+["Lisser","Casser les grains pour rendre un appareil lisse et homogène.",0],
+["Lustrer","Recouvrir pour donner un aspect brillant.",0],
+["Macérer","Tremper plus ou moins longtemps dans de l'alcool ou un liquide aromatique des fruits… pour les conserver ou les parfumer.",0],
+["Malaxer","Pétrir à la main.",0],
+["Masquer","Recouvrir entièrement la surface et les bords d'un gâteau.",1],
+["Masser","Se dit d'un sirop de sucre sursaturé qui cristallise. Il blanchit, devient trouble, puis laisse apparaître de petits cristaux de sucre.",0],
+["Maturation","Opération destinée à affiner les qualités gustatives d'un mix en le laissant mûrir à 4 °C pendant un certain temps.",0],
+["Mix","Mélange de tous les ingrédients d'une recette de glacerie.",0],
+["Monter","Battre pour rendre plus léger, augmenter le volume. Assembler plusieurs parties d'un gâteau.",0],
+["Mouiller","Étendre de l'eau sur une pâte. Ajouter un liquide à une préparation pour l'assouplir.",0],
+["Moulage","Pièce en chocolat réalisée à partir d'un moule.",0],
+["Mouler","Verser une préparation liquide dans un moule pour obtenir une reproduction de sa forme après solidification.",0],
+["Mousser","Battre un appareil pour le rendre plus léger et plus volumineux.",0],
+["Mûrir","Laisser une préparation reposer au réfrigérateur pour lui laisser prendre du goût.",0],
+["Nappe","Cuire à la nappe : cuisson qui implique que la préparation recouvre la spatule comme une nappe sur une table. 85 °C pour la crème anglaise.",0],
+["Napper","Recouvrir complètement avec un appareil liquide ou semi-liquide.",0],
+["Panade","Pâte à choux avant l'incorporation des œufs.",0],
+["Parer","Supprimer les éléments inutiles pour une meilleure présentation.",0],
+["Pasteuriser","Opération qui consiste à chauffer une préparation à une température inférieure à 100 °C en vue de la conserver plus longtemps tout en gardant ses qualités organoleptiques.",0],
+["Pâte à bombe","Mélange de jaunes d'œufs, voire d'œufs, et de sirop de sucre chauffés que l'on monte.",0],
+["Pâton","Pâte feuilletée ou pâte à croissant tourée, prête à l'emploi.",0],
+["Pincer","Agrémenter le pourtour d'une tarte en pinçant les bords avec une pince à tarte ou avec les doigts.",0],
+["Piquer","Faire des petits trous dans une abaisse de pâte pour l'empêcher de gonfler au cours de la cuisson.",1],
+["Pointage","Période de fermentation d'une pâte levée se situant entre le pétrissage et le façonnage.",1],
+["Pommade","Rendre un produit à la consistance d'une pommade.",0],
+["Pousse","Augmentation du volume d'une pâte sous l'action de levure biologique ou chimique.",0],
+["Puncher","Imbiber un biscuit de sirop ou d'alcool pour le rendre plus moelleux ou le parfumer.",0],
+["Rayer","Exécuter un décor sur une pâte après l'avoir dorée, à l'aide d'une lame de couteau.",0],
+["Réduire","Faire évaporer de l'eau par ébullition en vue de concentrer le goût et diminuer le volume.",0],
+["Relâcher","Se dit des pâtes ou des crèmes qui ramollissent quelque temps après la fabrication.",0],
+["Retomber","Mélange qui redescend après avoir été monté.",0],
+["Rognures","Chutes de pâte ou de biscuit restant après découpe.",0],
+["Rompre","Rabattre une pâte pendant le pointage pour lui redonner son aspect initial en chassant le gaz carbonique fabriqué par la levure afin de régénérer cette pâte.",0],
+["Ruban","État d'une préparation devenue suffisamment épaisse pour qu'elle s'écoule lentement comme un ruban.",0],
+["Sabler","Mélanger à sec le beurre et la farine dans le pétrissage de certaines pâtes. Faire masser volontairement le sucre pour faire des amandes caramélisées par exemple.",1],
+["Saisir","Cuire à four chaud ou à feu vif pendant un temps très court.",0],
+["Sangler","Transformer un mix en glace ou sorbet (turbiner). Refroidir un moule pour y chemiser la glace. Refroidir un récipient vide afin d'y débarrasser de la glace.",0],
+["Saupoudrer","Parsemer une substance en poudre à l'aide d'une saupoudreuse dont le couvercle est percé de petits trous. (On dit aussi « poudrer ».)",0],
+["Serrer","Raffermir des blancs d'œufs avec du sucre.",0],
+["Stériliser","Action de détruire par la chaleur la totalité des germes microbiens à une température supérieure à 100 °C.",0],
+["Surgeler","Congeler un produit très rapidement à −18 °C à cœur.",0],
+["Tabler","Mettre de la couverture de chocolat au point en travaillant les deux tiers de la masse sur une table pour la refroidir.",0],
+["Tamiser","Se servir d'un tamis en vue d'enlever les grumeaux d'un produit.",0],
+["Tant pour tant","Deux produits mélangés en même quantité.",0],
+["Tourer","Plier un pâton après l'avoir allongé pour intercaler des couches de pâte et des couches de beurre (pâte feuilletée et pâte levée feuilletée).",0],
+["Travailler","Battre, pétrir, mélanger pendant un certain temps.",0],
+["Tremper","Imbiber un baba en le plongeant dans un sirop léger. Plonger des bonbons dans de la couverture pour les enrober.",0],
+["Venue","Recette réalisée selon une quantité déterminée.",0],
+["Videler","Replier le bord d'une abaisse pour enfermer une garniture.",0],
+["Zester","Enlever la fine pellicule colorée d'un citron ou d'une orange en vue d'en extraire l'arôme.",1]
+];
+
+const FAMS = [
+ {t:"Les temps de fermentation",tip:"Ordre du pain : pétrissage → POINTAGE → façonnage → APPRÊT → cuisson. « Pointage » vient en Premier, « Apprêt » = la pâte est prête pour le four.",w:["Pointage","Apprêt","Rompre","Pousse","Développer","Étuver"]},
+ {t:"Recouvrir : lequel ?",tip:"Napper = liquide versé dessus. Masquer = dessus + bords d'un gâteau. Enrober = tout le produit. Chemiser = l'INTÉRIEUR du moule (comme une chemise qu'on met dedans).",w:["Napper","Masquer","Enrober","Chemiser","Glacer","Abricoter","Dorer","Lustrer","Chablonner"]},
+ {t:"Préparer le moule et le tour",tip:"Fleurer = fariner en encore plus fin (une « fleur » de farine). Foncer = mettre la pâte au FOND du moule. Graisser a un 2e sens : anti-cristallisant pour que le sucre ne masse pas.",w:["Fariner","Fleurer","Beurrer","Huiler","Graisser","Foncer","Garnir","Fond"]},
+ {t:"Fouetter : qui avec quoi ?",tip:"Blanchir = jaunes + sucre (ça devient blanc). Crémer = beurre + sucre (ça devient crème). Serrer = blancs + sucre (on les serre, ils deviennent fermes).",w:["Battre","Blanchir","Crémer","Serrer","Monter","Mousser","Travailler","Retomber"]},
+ {t:"Mouiller avec un liquide",tip:"Puncher = biscuit au pinceau. Tremper = on PLONGE (baba). Macérer = fruits qui baignent longtemps. Imbiber = mot général.",w:["Imbiber","Puncher","Tremper","Macérer","Mouiller"]},
+ {t:"Le sucre",tip:"Masser = le sirop cristallise (accident). Sabler = on le fait masser exprès. Décuire = on ajoute du liquide pour faire baisser la cuisson.",w:["Masser","Sabler","Décuire","Candir","Caraméliser","Brûler","Écumer"]},
+ {t:"Le chocolat",tip:"Tabler = sur la TABLE (marbre) pour mettre au point. Concher = lisser la couverture. Chablon (l'objet) ≠ chablonner (la fine couche de chocolat).",w:["Tabler","Concher","Chablonner","Chablon","Ébarber","Intérieur","Moulage","Mouler"]},
+ {t:"Couper, marquer, décorer",tip:"Canneler = rainures parallèles. Chiqueter = petits coups de couteau sur le tour du feuilletage. Rayer = décor au couteau après dorure. Piquer = petits trous.",w:["Détailler","Canneler","Chiqueter","Rayer","Pincer","Piquer","Parer","Rognures","Videler"]},
+ {t:"Les pâtes",tip:"Détrempe (farine + eau + sel) + beurre → on toure → pâton. Corps = l'élasticité ; corser = la lui donner ; fraser = lisser SANS donner de corps.",w:["Abaisser","Façonner","Détrempe","Tourer","Pâton","Bouler","Corps","Corser","Fraser","Malaxer","Panade","Dessécher"]},
+ {t:"Enlever quelque chose",tip:"Émonder = la peau. Zester = le zeste. Écumer = la mousse/impuretés. Ébarber = les coulures (les « barbes ») de chocolat. Clarifier = séparer jaune et blanc.",w:["Émonder","Zester","Écumer","Ébarber","Clarifier","Tamiser","Corner"]},
+ {t:"Froid, chaud, conservation",tip:"Pasteuriser < 100 °C, Stériliser > 100 °C. Surgeler = −18 °C à cœur. Maturation = mix à 4 °C.",w:["Mix","Maturation","Mûrir","Sangler","Pasteuriser","Stériliser","Surgeler","Confire","Saisir","Réduire"]},
+ {t:"Textures et états",tip:"Ruban = s'écoule comme un ruban. Nappe = recouvre la spatule (85 °C pour l'anglaise). Relâcher = ramollit après fabrication. Grainer = le contraire d'homogénéiser.",w:["Pommade","Beurre pommade","Ruban","Nappe","Ferme","Relâcher","Grainer","Homogénéiser","Lisser","Lier","Émulsionner","Coller","Appareil"]},
+];
+
+
+
+
+
+function norm(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z ]/g,"").replace(/\s+/g," ").trim()}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+
+/* ---------- Explications simples (« En clair ») ---------- */
+const EXPL={
+"Abaisser":"Passer le rouleau sur la pâte pour la rendre fine et plate. La pâte étalée s'appelle une abaisse.",
+"Abricoter":"Mettre au pinceau une gelée brillante couleur abricot sur une tarte aux fruits pour qu'elle brille.",
+"Appareil":"Le mélange qu'on a préparé et qui n'est pas encore cuit. Exemple : l'appareil à crème brûlée.",
+"Apprêt":"La dernière pousse : la pâte a sa forme (croissant, pain…) et on attend qu'elle gonfle avant de l'enfourner.",
+"Aromates":"Ce qui donne du parfum : vanille, cannelle, café, zestes…",
+"Bain-marie":"On pose un récipient dans une casserole d'eau chaude pour chauffer doucement, sans brûler (chocolat, crème).",
+"Beurrer":"Mettre du beurre dans le moule pour que rien n'accroche. Ou ajouter le beurre dans la pâte avant de la plier (feuilletage).",
+"Blanchir":"Fouetter fort jaunes d'œufs + sucre : le mélange devient plus clair, presque blanc, et mousseux.",
+"Bouler":"Faire une boule bien serrée avec la pâte, en la roulant sous la main. Ça la rend plus forte.",
+"Broyer":"Écraser très fort jusqu'à obtenir une poudre (exemple : des amandes, des pralines).",
+"Brûler":"Rater par excès : jaunes + sucre laissés sans mélanger font des grains, une pâte trop travaillée devient cassante, un gâteau trop cuit noircit.",
+"Buée":"La vapeur dans le four. On en met pour que le pain ait une belle croûte brillante.",
+"Candir":"Recouvrir des bonbons de petits cristaux de sucre, comme une croûte qui les protège.",
+"Canneler":"Faire des petites rainures bien droites avec un couteau spécial (canneleur), comme des rayures.",
+"Caraméliser":"Mettre du caramel dans un moule, ou brûler du sucre sur le dessus d'un gâteau au chalumeau (crème brûlée).",
+"Chablon":"Un pochoir : une plaque trouée avec une forme, pour faire des biscuits tous pareils.",
+"Chablonner":"Étaler une couche très fine de chocolat sous un intérieur (ganache, praliné) pour faire une semelle avant de le découper.",
+"Chemiser":"Tapisser l'intérieur du moule (chocolat, papier, caramel…), comme si on lui mettait une chemise dedans.",
+"Chiqueter":"Faire des petites entailles avec le dos du couteau sur le bord d'un feuilleté pour qu'il monte droit et soit joli.",
+"Clarifier":"Séparer le jaune et le blanc de l'œuf.",
+"Coller":"Mettre de la gélatine pour que la préparation tienne (bavarois, mousse).",
+"Concher":"Mélanger longtemps le chocolat pour qu'il devienne bien lisse et doux.",
+"Confire":"Cuire des fruits dans du sucre longtemps : le sucre remplace l'eau, ils se gardent longtemps (fruits confits).",
+"Corner":"Utiliser la corne (raclette souple en plastique) pour racler la bassine ou remplir une poche.",
+"Corps":"La force de la pâte : quand elle est élastique et résiste. C'est grâce au gluten de la farine.",
+"Corser":"Donner de la force à la pâte en la pétrissant. Ou donner plus de goût à une crème.",
+"Coucher":"Faire des formes (éclairs, choux, meringues) sur la plaque avec la poche à douille.",
+"Crémer":"Fouetter beurre mou + sucre jusqu'à avoir une crème légère.",
+"Décuire":"Le sucre a trop chauffé ? On ajoute un peu d'eau pour faire redescendre la température.",
+"Dessécher":"Faire partir l'eau. Pour la pâte à choux : on remue sur le feu jusqu'à ce qu'elle ne colle plus.",
+"Détailler":"Découper des formes dans la pâte étalée (avec un couteau ou un emporte-pièce, comme pour des sablés).",
+"Détrempe":"Le début de la pâte feuilletée : farine + eau + sel, avant d'ajouter le beurre.",
+"Développer":"Gonfler, prendre du volume (au four ou pendant la pousse).",
+"Dresser":"Donner une forme avec la poche à douille. Proche de « coucher ».",
+"Ébarber":"Enlever les bavures de chocolat qui dépassent quand on démoule un lapin ou un œuf en chocolat.",
+"Écumer":"Enlever avec une écumoire la mousse sale qui monte à la surface (confiture, sucre).",
+"Émonder":"Retirer la peau : on plonge dans l'eau bouillante, puis la peau part toute seule.",
+"Émulsionner":"Faire tenir ensemble deux liquides qui normalement se séparent, comme l'huile et l'eau (mayonnaise, ganache).",
+"Enrober":"Recouvrir complètement, partout (bonbon trempé dans le chocolat).",
+"Étuver":"Mettre dans l'étuve, une armoire chaude et humide, pour que la pâte pousse plus vite.",
+"Façonner":"Donner la forme avec les mains : rouler un croissant, former une baguette.",
+"Fariner":"Mettre un peu de farine sur la table ou le moule pour que la pâte ne colle pas.",
+"Ferme":"Bien tenu. Une pâte dure, ou des blancs en neige qui restent debout.",
+"Fleurer":"Fariner très légèrement, juste un voile.",
+"Foncer":"Mettre la pâte étalée dans le moule à tarte et bien l'appuyer au fond et sur les bords.",
+"Fond":"La base du gâteau : le fond de tarte, le disque de génoise…",
+"Fraser":"Écraser la pâte avec la paume pour bien mélanger, sans la rendre élastique (pâte sucrée, pâte brisée).",
+"Garnir":"Remplir : une poche, un moule, un fond de tarte.",
+"Glacer":"Recouvrir d'un glaçage brillant (fondant sur un éclair, sucre glace).",
+"Grainer":"Rater la texture : des petits grains apparaissent (blancs trop battus, sucre qui cristallise).",
+"Graisser":"Mettre du gras dans un moule. Ou ajouter du glucose dans un sucre pour qu'il ne fasse pas de cristaux.",
+"Homogénéiser":"Mélanger jusqu'à ce que ce soit pareil partout, sans grumeaux.",
+"Huiler":"Mettre une fine couche d'huile (moule, marbre). Une pâte d'amandes « huile » quand elle rend de l'huile.",
+"Imbiber":"Mouiller un biscuit avec du sirop pour qu'il soit moelleux et parfumé.",
+"Intérieur":"Le cœur d'un bonbon au chocolat (ganache, praliné) avant de l'enrober.",
+"Lier":"Rendre plus épais en ajoutant farine, jaune d'œuf ou crème.",
+"Lisser":"Rendre bien lisse, sans grains.",
+"Lustrer":"Rendre brillant.",
+"Macérer":"Laisser tremper des fruits dans de l'alcool ou un sirop pour qu'ils prennent le goût.",
+"Malaxer":"Pétrir avec les mains.",
+"Masquer":"Recouvrir tout le gâteau, dessus ET côtés, avec de la crème à la spatule.",
+"Masser":"Accident : le sirop de sucre fait des cristaux, devient blanc et trouble.",
+"Maturation":"Laisser reposer le mélange à glace au frigo pour que le goût soit meilleur.",
+"Mix":"Le mélange de base pour faire une glace, avant de le turbiner.",
+"Monter":"Fouetter pour rendre plus léger (blancs en neige, crème fouettée). Ou assembler les couches d'un gâteau.",
+"Mouiller":"Ajouter de l'eau ou un liquide.",
+"Moulage":"Un sujet en chocolat fait dans un moule (lapin, œuf de Pâques).",
+"Mouler":"Verser dans un moule et laisser durcir pour obtenir sa forme.",
+"Mousser":"Fouetter pour rendre plus léger et plus gros.",
+"Mûrir":"Laisser reposer au frigo pour que le goût se développe.",
+"Nappe":"Test de cuisson de la crème anglaise : elle recouvre la cuillère et quand on passe le doigt, la trace reste nette.",
+"Napper":"Verser un liquide épais pour recouvrir (coulis, glaçage).",
+"Panade":"Le début de la pâte à choux : eau + beurre + farine cuits ensemble, avant d'ajouter les œufs.",
+"Parer":"Couper ce qui dépasse pour que ce soit propre et joli.",
+"Pasteuriser":"Chauffer sans faire bouillir (moins de 100 °C) pour tuer une partie des microbes, en gardant le goût.",
+"Pâte à bombe":"Jaunes d'œufs + sirop de sucre chaud, fouettés jusqu'à refroidir : base des mousses.",
+"Pâton":"Le bloc de pâte feuilletée prêt, après les plis.",
+"Pincer":"Faire un joli bord ondulé sur une tarte, avec une pince ou les doigts.",
+"Piquer":"Faire des trous avec une fourchette (ou un pique-vite) dans la pâte pour qu'elle ne gonfle pas au four.",
+"Pointage":"La première pousse : juste après le pétrissage, avant de donner la forme.",
+"Pommade":"Rendre mou et crémeux, comme une crème pour les mains (beurre pommade).",
+"Pousse":"La pâte gonfle grâce à la levure.",
+"Puncher":"Imbiber un biscuit au pinceau avec du sirop (ou de l'alcool).",
+"Rayer":"Dessiner des traits avec la pointe du couteau sur une pâte dorée (dessus de galette).",
+"Réduire":"Faire bouillir pour que l'eau s'évapore : il en reste moins, avec plus de goût.",
+"Relâcher":"Une crème ou une pâte devient molle un moment après avoir été faite.",
+"Retomber":"Le mélange fouetté redescend, il perd son volume.",
+"Rognures":"Les chutes de pâte qui restent après avoir découpé.",
+"Rompre":"Appuyer sur la pâte en train de pousser pour chasser le gaz, puis la replier. Elle repart plus forte.",
+"Ruban":"Quand on soulève le fouet, le mélange coule doucement en faisant un ruban qui se plie.",
+"Sabler":"Frotter beurre et farine entre les mains jusqu'à faire du sable. Ou faire cristalliser exprès le sucre autour des amandes.",
+"Saisir":"Cuire très chaud et très vite.",
+"Sangler":"Faire la glace dans la turbine. Ou bien refroidir un moule ou un bac avant d'y mettre la glace.",
+"Saupoudrer":"Parsemer une poudre (sucre glace, cacao) avec une boîte à trous.",
+"Serrer":"À la fin, ajouter du sucre aux blancs en neige pour qu'ils deviennent fermes et brillants.",
+"Stériliser":"Chauffer au-dessus de 100 °C pour tuer TOUS les microbes (bocaux).",
+"Surgeler":"Refroidir très vite jusqu'à −18 °C au milieu du produit.",
+"Tabler":"Mettre le chocolat au point : on en verse sur le marbre, on le travaille pour le refroidir, puis on le remet avec le reste. Il sera brillant et cassant.",
+"Tamiser":"Passer la farine ou le sucre glace dans un tamis pour enlever les grumeaux.",
+"Tant pour tant":"Moitié-moitié : même poids de deux ingrédients (souvent poudre d'amande + sucre glace).",
+"Tourer":"Faire les plis de la pâte feuilletée : étaler, plier en 3 ou en 4, recommencer. Ça crée les couches.",
+"Travailler":"Mélanger, battre ou pétrir un certain temps.",
+"Tremper":"Plonger dans un liquide : un baba dans le sirop, un bonbon dans le chocolat.",
+"Venue":"La quantité de recette qu'on fait d'un coup (une venue de 2 kg de pâte).",
+"Videler":"Replier le bord de la pâte sur la garniture pour la fermer (comme un ourlet).",
+"Zester":"Râper la peau colorée du citron ou de l'orange pour prendre son parfum (pas la partie blanche, amère)."
+};
+
+/* Mots difficiles dans les définitions : touche-les pour voir leur sens */
+const GLOSS={
+"abaisse":"pâte étalée au rouleau","nappage blond":"gelée brillante couleur abricot","couverture":"chocolat de pâtissier, riche en beurre de cacao",
+"non au point":"chocolat fondu mais pas tempéré","au point":"chocolat tempéré : fondu, refroidi puis réchauffé, pour être brillant et cassant",
+"étuve":"armoire chaude et humide où la pâte pousse","façonnage":"moment où l'on donne sa forme à la pâte","pétrissage":"moment où l'on mélange et travaille la pâte",
+"tourage":"les plis qui créent les couches du feuilletage","feuilletage":"pâte en fines couches (mille-feuille, chausson)","pâte levée":"pâte avec de la levure (brioche, croissant)",
+"pâtes levées":"pâtes avec de la levure (brioche, croissant)","organoleptiques":"goût, odeur, couleur et texture","sursaturé":"avec tellement de sucre que l'eau ne peut plus tout dissoudre",
+"gluten":"protéine de la farine qui rend la pâte élastique","emporte-pièce":"forme en métal pour découper la pâte","palette":"spatule plate et souple",
+"douille":"embout de la poche, qui donne la forme","corne":"raclette souple en plastique","caissette":"petit moule en papier",
+"intérieurs":"cœurs des bonbons au chocolat (ganache, praliné)","glacerie":"fabrication des glaces","turbiner":"passer dans la turbine, la machine à glace",
+"débarrasser":"transvaser dans un autre récipient","anti-cristallisant":"produit (souvent du glucose) qui empêche le sucre de faire des cristaux",
+"gaz carbonique":"gaz fabriqué par la levure, qui fait les bulles","fondant":"pâte de sucre blanche et brillante pour glacer","marbre":"plan de travail en pierre, toujours froid",
+"concasser":"casser en petits morceaux","humecter":"mouiller légèrement","calibre":"modèle pour avoir toujours la même taille","parois":"les côtés",
+"substances":"ingrédients","incorporer":"ajouter en mélangeant","enduire":"recouvrir d'une couche","sujet en chocolat":"figurine en chocolat (lapin, œuf…)",
+"coulures":"gouttes qui ont débordé","démoulage":"le moment où l'on sort du moule","génoise":"biscuit léger qui sert de base aux gâteaux",
+"appareil":"mélange préparé, pas encore cuit","beurre clarifié":"beurre fondu dont on a retiré la partie blanche","ébullition":"quand ça bout",
+"régénérer":"redonner de la force","homogène":"pareil partout, sans grumeaux","onctueuse":"douce et crémeuse","rainures":"petites lignes creusées",
+"taillader":"faire des petites entailles","pâton":"bloc de pâte feuilletée prêt","baba":"gâteau à la levure qu'on trempe dans le sirop",
+"grumeaux":"petites boules qui ne se sont pas mélangées","cristalliser":"faire des petits cristaux, comme du sucre en grains","semi-liquide":"à moitié liquide, épais",
+"pochoir":"plaque trouée pour faire des formes","fermentation":"la levure travaille et fait gonfler la pâte","levure":"ce qui fait gonfler la pâte"
+};
+const GKEYS=Object.keys(GLOSS).sort((a,b)=>b.length-a.length);
+const GRX=new RegExp("(^|[^a-zà-ÿ-])("+GKEYS.map(k=>k.replace(/[-]/g,"\\-")).join("|")+")(?=$|[^a-zà-ÿ-])","gi");
+// définition avec les mots difficiles soulignés ; on n'explique jamais un mot qui donnerait la réponse
+function rich(d,w){
+  const stem=w?norm(w.m).slice(0,5):"~";
+  return esc(d).replace(GRX,(all,pre,t)=>{const k=t.toLowerCase();
+    if(!GLOSS[k]||norm(k).startsWith(stem))return all;
+    return `${pre}<button type="button" class="gl" data-gl="${esc(k)}">${t}</button>`});
+}
+function clair(w){return EXPL[w.m]?`<div class="clair"><b>En clair</b><span>${esc(EXPL[w.m])}</span></div>`:""}
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".gl");if(!b)return;e.stopPropagation();
+  const host=b.closest(".def,dd,.hint")||b.parentElement;
+  let box=host.nextElementSibling&&host.nextElementSibling.classList.contains("glbox")?host.nextElementSibling:null;
+  if(!box){box=document.createElement("p");box.className="glbox";host.after(box)}
+  if(box.dataset.k===b.dataset.gl){box.remove();return}
+  box.dataset.k=b.dataset.gl;box.innerHTML=`<b>${esc(b.textContent)}</b> : ${esc(GLOSS[b.dataset.gl])}`;
+},true);
+
+
+/* ---------- Outils ---------- */
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function dayNum(d=new Date()){return Math.floor((d.getTime()-d.getTimezoneOffset()*6e4)/864e5)}
+const TODAY=()=>dayNum();
+function lev(a,b){const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);for(let j=1;j<=n;j++)d[0][j]=j;
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
+
+const W=RAW.map(([m,d,c])=>({m,d,c:!!c,l:norm(m)[0].toUpperCase()}));
+const byM=Object.fromEntries(W.map(w=>[w.m,w]));
+const famOf={};FAMS.forEach((f,fi)=>f.w.forEach(m=>{(famOf[m]=famOf[m]||[]).push(fi)}));
+const LETTERS=[...new Set(W.map(w=>w.l))];
+const N=W.length;
+
+/* ---------- Icônes ---------- */
+const IC={
+ fire:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 3.5 5 6 5 11a5 5 0 0 1-10 0c0-2.2 1.2-3.8 2.4-5 .1 1.6.8 2.8 2.1 3.2C11 8.5 11 5 12 2z"/></svg>',
+ gem:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20L12 21z" opacity=".75"/><path d="M8 9l4 12 4-12z" fill="#fff" opacity=".35"/></svg>',
+ star:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8z"/></svg>',
+ bolt:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
+ crown:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 7l4.5 4L12 4l4.5 7L21 7l-2 12H5z"/></svg>',
+ trophy:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 3h10v4a5 5 0 0 1-10 0z"/><path d="M5 4H2v2a4 4 0 0 0 4 4M19 4h3v2a4 4 0 0 1-4 4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 12h4v4h3v4H7v-4h3z"/></svg>',
+ lock:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.6"/></svg>',
+ check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+ x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+ sound:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+ play:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg>',
+ clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>',
+ pen:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 4l5 5-11 11H4v-5z"/></svg>',
+ cards:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="6" width="12" height="15" rx="2" opacity=".6"/><rect x="8" y="3" width="13" height="15" rx="2"/></svg>',
+ target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>',
+ ice:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 2v20M3.5 7l17 10M3.5 17l17-10M9 4l3 2 3-2M9 20l3-2 3 2"/></svg>',
+};
+
+/* Mascotte : Chouquette, un chou à la crème avec sa toque */
+function mascot(mood="happy",size=96){
+  const mouth=mood==="sad"?'<path d="M40 74q10-8 20 0" stroke="#5A3A22" stroke-width="4" fill="none" stroke-linecap="round"/>'
+    :mood==="wow"?'<ellipse cx="50" cy="72" rx="7" ry="8" fill="#5A3A22"/><ellipse cx="50" cy="75" rx="4" ry="3" fill="#FF7A9A"/>'
+    :'<path d="M38 68q12 13 24 0z" fill="#5A3A22"/><path d="M43 72q7 5 14 0" fill="#FF7A9A"/>';
+  const arms=mood==="wow"?'<path d="M14 62l-10-16M86 62l10-16" stroke="#C98A3F" stroke-width="7" stroke-linecap="round"/>':'<path d="M14 66l-8 8M86 66l8 8" stroke="#C98A3F" stroke-width="7" stroke-linecap="round"/>';
+  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" aria-hidden="true">
+   ${arms}
+   <ellipse cx="50" cy="96" rx="30" ry="4" fill="rgba(0,0,0,.12)"/>
+   <path d="M12 66c0-24 17-38 38-38s38 14 38 38c0 16-17 28-38 28S12 82 12 66z" fill="#E9AE5B"/>
+   <path d="M16 58c8 6 20 8 34 8s26-2 34-8c-2-14-16-26-34-26S18 44 16 58z" fill="#D4923E"/>
+   <path d="M18 60c6-4 12 2 18-2s12 3 16-1 12 3 16-1 10 2 14 0c-2 5-10 9-32 9s-30-3-32-5z" fill="#FFF6E8"/>
+   <circle cx="30" cy="44" r="2.5" fill="#FFF6E8"/><circle cx="62" cy="38" r="2.5" fill="#FFF6E8"/><circle cx="72" cy="48" r="2.5" fill="#FFF6E8"/><circle cx="44" cy="36" r="2" fill="#FFF6E8"/>
+   <ellipse cx="38" cy="${mood==="sad"?60:58}" rx="6" ry="${mood==="sad"?4:7}" fill="#fff"/><ellipse cx="62" cy="${mood==="sad"?60:58}" rx="6" ry="${mood==="sad"?4:7}" fill="#fff"/>
+   <circle cx="39" cy="59" r="3.4" fill="#2B1B10"/><circle cx="63" cy="59" r="3.4" fill="#2B1B10"/>
+   <circle cx="28" cy="68" r="4" fill="#FF9AB0" opacity=".6"/><circle cx="72" cy="68" r="4" fill="#FF9AB0" opacity=".6"/>
+   ${mouth}
+   <rect x="34" y="18" width="32" height="12" rx="3" fill="#fff" stroke="#E5E5E5" stroke-width="1.5"/>
+   <path d="M30 20c-8-2-10-12-2-15 2-8 14-8 16-2 4-6 16-4 16 3 8-1 10 10 2 14z" fill="#fff" stroke="#E5E5E5" stroke-width="1.5"/>
+  </svg>`;
+}
+
+/* ---------- État ---------- */
+const DEF={cards:{},xp:0,days:{},badges:{},best:{chrono:0,combo:0},writeOk:0,perfectPairs:0,
+  gems:20,freezes:0,frozen:[],done:{},q:{},qdone:{},boostUntil:0,sound:true,perfects:0};
+let S=JSON.parse(JSON.stringify(DEF));
+try{const s=JSON.parse(localStorage.getItem("lexpat3")||"null")||JSON.parse(localStorage.getItem("lexpat2")||"null");if(s)S=Object.assign(S,s)}catch(e){}
+function save(){try{localStorage.setItem("lexpat3",JSON.stringify(S))}catch(e){}}
+
+const card=w=>S.cards[w.m]||(S.cards[w.m]={b:0,due:TODAY(),ok:0,n:0});
+const B=w=>(S.cards[w.m]||{b:0}).b;
+const seen=w=>!!(S.cards[w.m]&&S.cards[w.m].n);
+const isMastered=w=>B(w)>=4;
+const masteredCount=()=>W.filter(isMastered).length;
+const STATE=["Nouveau","À découvrir","En cours","Presque","Maîtrisé","Ancré"];
+const INT=[0,0,1,3,7,14];
+const GOAL=30;
+
+const GRADES=[
+ {n:"Apprenti",at:0,d:"On découvre le métier."},{n:"Aspirant",at:15,d:"Les bases sont posées."},
+ {n:"Compagnon",at:40,d:"Tu parles comme un pro."},{n:"Compagnon fini",at:75,d:"Le lexique n'a presque plus de secrets."},
+ {n:"Maître pâtissier",at:100,d:"Prêt pour l'examen."},{n:"Meilleur ouvrier",at:N,d:"Tous les mots maîtrisés."}];
+function gradeOf(k){let g=0;GRADES.forEach((x,i)=>{if(k>=x.at)g=i});return g}
+
+/* ---------- Parcours : unités et leçons ---------- */
+const UNITS=[
+ {t:"A et B",L:["A","B"],c:"--green",cd:"--green-d"},{t:"C",L:["C"],c:"--purple",cd:"--purple-d"},
+ {t:"D, E, F",L:["D","E","F"],c:"--blue",cd:"--blue-d"},{t:"G à M",L:["G","H","I","L","M"],c:"--orange",cd:"--orange-d"},
+ {t:"N, P, R",L:["N","P","R"],c:"--pink",cd:"--pink-d"},{t:"S à Z",L:["S","T","V","Z"],c:"--red",cd:"--red-d"},
+ {t:"Grand final",L:LETTERS,c:"--green",cd:"--green-d",final:true}];
+const NODES=[];
+UNITS.forEach((u,ui)=>{
+  const ws=W.filter(w=>u.L.includes(w.l));u.words=ws;
+  if(u.final){for(let k=0;k<3;k++)NODES.push({id:`f${k}`,unit:ui,type:"review",words:ws,n:15});return}
+  const k=Math.ceil(ws.length/5);
+  for(let i=0;i<k;i++)NODES.push({id:`u${ui}l${i}`,unit:ui,type:"lesson",words:ws.slice(Math.round(i*ws.length/k),Math.round((i+1)*ws.length/k))});
+  NODES.push({id:`u${ui}r`,unit:ui,type:"review",words:ws,n:12});
+});
+const nodeDone=n=>!!S.done[n.id];
+const nodeOpen=i=>i===0||nodeDone(NODES[i-1])||nodeDone(NODES[i]);
+const nodeGold=n=>nodeDone(n)&&n.words.every(isMastered);
+
+/* ---------- Série et gel ---------- */
+const active=d=>(S.days[d]||0)>0||S.frozen.includes(d);
+function streak(){let d=TODAY(),k=0;if(!active(d))d--;while(active(d)){k++;d--}return k}
+function applyFreeze(){const y=TODAY()-1;if(!active(y)&&active(y-1)&&S.freezes>0){S.frozen.push(y);S.freezes--;save();
+  setTimeout(()=>toast("Série protégée !","Ton gel de série a sauvé ta série d'hier.","var(--blue)",IC.ice,true),600)}}
+
+/* ---------- Quêtes du jour ---------- */
+const QPOOL=[
+ {id:"xp",n:"Gagner 50 XP",goal:50,k:"xp"},{id:"ok",n:"Donner 20 bonnes réponses",goal:20,k:"ok"},
+ {id:"les",n:"Terminer 2 leçons",goal:2,k:"lessons"},{id:"wr",n:"Écrire 5 mots sans faute",goal:5,k:"write"},
+ {id:"cb",n:"Faire une série de 8",goal:8,k:"combo",max:true},{id:"rev",n:"Faire une révision du jour",goal:1,k:"review"},
+ {id:"ch",n:"Marquer 10 points au Chrono",goal:10,k:"chrono",max:true},{id:"pf",n:"Finir une leçon sans faute",goal:1,k:"perfect"}];
+function todaysQuests(){const t=TODAY(),idx=[];let s=t*7;while(idx.length<3){s=(s*31+11)%997;const i=s%QPOOL.length;if(!idx.includes(i))idx.push(i)}return idx.map(i=>QPOOL[i])}
+function Q(){if(S.q.day!==TODAY())S.q={day:TODAY()};return S.q}
+function bump(k,v=1,max=false){const q=Q();q[k]=max?Math.max(q[k]||0,v):(q[k]||0)+v;
+  const qs=todaysQuests();let all=true;
+  qs.forEach(x=>{const key=TODAY()+x.id;const val=q[x.k]||0;
+    if(val>=x.goal&&!S.qdone[key]){S.qdone[key]=1;S.gems+=10;sfx("quest");toast("Quête réussie !",x.n+" · +10 gemmes","var(--yellow)",IC.target,true)}
+    if(!S.qdone[key])all=false});
+  if(all&&!S.qdone[TODAY()+"all"]){S.qdone[TODAY()+"all"]=1;S.gems+=20;toast("Coffre du jour ouvert !","Les 3 quêtes sont faites · +20 gemmes","var(--orange)",IC.gem,true)}
+  save()}
+const boost=()=>Date.now()<S.boostUntil;
+
+/* ---------- Badges ---------- */
+const BADGES=[
+ ["first","Premier pas","1re réponse",IC.star,"--green",()=>W.some(seen)],
+ ["m10","Commis","10 mots maîtrisés",IC.star,"--green",()=>masteredCount()>=10],
+ ["m25","25 mots","25 mots maîtrisés",IC.star,"--blue",()=>masteredCount()>=25],
+ ["m50","Mi-parcours","50 mots maîtrisés",IC.star,"--purple",()=>masteredCount()>=50],
+ ["m80","80 mots","80 mots maîtrisés",IC.star,"--orange",()=>masteredCount()>=80],
+ ["mall","Lexique complet","Tous maîtrisés",IC.crown,"--yellow",()=>masteredCount()>=N],
+ ["goal","Objectif du jour","30 réponses en un jour",IC.target,"--green",()=>(S.days[TODAY()]||0)>=GOAL],
+ ["s3","En feu","3 jours d'affilée",IC.fire,"--orange",()=>streak()>=3],
+ ["s7","Une semaine","7 jours d'affilée",IC.fire,"--orange",()=>streak()>=7],
+ ["s14","Inarrêtable","14 jours d'affilée",IC.fire,"--red",()=>streak()>=14],
+ ["c10","Série de 10","10 justes d'affilée",IC.bolt,"--yellow",()=>S.best.combo>=10],
+ ["c25","Série de 25","25 justes d'affilée",IC.bolt,"--orange",()=>S.best.combo>=25],
+ ["ch15","Main rapide","15 pts au Chrono",IC.clock,"--blue",()=>S.best.chrono>=15],
+ ["ch25","Coup de feu","25 pts au Chrono",IC.clock,"--purple",()=>S.best.chrono>=25],
+ ["pf","Sans faute","Leçon parfaite",IC.check,"--green",()=>S.perfects>=1],
+ ["pf5","Perfectionniste","5 leçons parfaites",IC.check,"--purple",()=>S.perfects>=5],
+ ["w20","Plume d'or","20 mots écrits sans faute",IC.pen,"--yellow",()=>S.writeOk>=20],
+ ...UNITS.slice(0,6).map((u,i)=>[`u${i}`,`Unité ${i+1}`,`Trophée ${u.t}`,IC.trophy,u.c,()=>!!S.done[`u${i}r`]]),
+];
+function checkRewards(pg){
+  BADGES.forEach(([id,n,d,ic,c,f])=>{if(!S.badges[id]&&f()){S.badges[id]=TODAY();S.gems+=5;sfx("quest");toast("Badge : "+n,d+" · +5 gemmes",`var(${c})`,ic,true)}});
+  const g=gradeOf(masteredCount());if(g>pg){sfx("level");toast("Nouveau grade : "+GRADES[g].n,GRADES[g].d,"var(--purple)",IC.crown,true)}
+  save();
+}
+
+/* ---------- Sons ---------- */
+let AC=null;
+function sfx(kind){if(!S.sound)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();
+  const seq={ok:[[660,.0],[880,.09]],ko:[[220,0],[180,.12]],done:[[523,0],[659,.1],[784,.2],[1047,.32]],quest:[[784,0],[988,.08],[1175,.16]],level:[[523,0],[784,.12],[1047,.24],[1319,.36]],tap:[[500,0]]}[kind]||[];
+  seq.forEach(([f,t])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=kind==="ko"?"sawtooth":"triangle";o.frequency.value=f;
+    const s=AC.currentTime+t;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(kind==="ko"?.06:.13,s+.01);g.gain.exponentialRampToValueAtTime(.001,s+(kind==="tap"?.06:.22));
+    o.connect(g).connect(AC.destination);o.start(s);o.stop(s+.25)})}catch(e){}}
+function say(t){try{const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+
+/* ---------- Toasts et confettis ---------- */
+let toastQ=[],toastBusy=false;
+function toast(t,s,c,ic,conf){toastQ.push([t,s,c,ic,conf]);if(!toastBusy)nextToast()}
+function nextToast(){const x=toastQ.shift();if(!x){toastBusy=false;return}toastBusy=true;
+  const el=document.getElementById("toast");el.innerHTML=`<span class="ti" style="background:${x[2]}">${x[3]}</span><span><b>${esc(x[0])}</b><span>${esc(x[1])}</span></span>`;
+  el.classList.add("show");if(x[4])confetti();setTimeout(()=>{el.classList.remove("show");setTimeout(nextToast,380)},2600)}
+function confetti(){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const c=document.getElementById("confetti"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;
+  const cols=["#58CC02","#1CB0F6","#FF9600","#FF4B4B","#CE82FF","#FFC800"];
+  const P=Array.from({length:140},()=>({x:c.width/2+(Math.random()-.5)*120,y:c.height*.4,vx:(Math.random()-.5)*14,vy:-Math.random()*13-4,s:Math.random()*7+5,r:Math.random()*6,c:pick(cols)}));
+  let f=0;(function step(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.r+=.12;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});
+    if(++f<120)requestAnimationFrame(step);else x.clearRect(0,0,c.width,c.height)})();
+}
+
+/* ---------- Réponse (répétition espacée) ---------- */
+let combo=0;
+function answer(w,q){
+  const c=card(w),t=TODAY(),wasDue=c.due<=t||c.b===0,pg=gradeOf(masteredCount()),wasM=c.b>=4;
+  c.n++;S.days[t]=(S.days[t]||0)+1;const goalBefore=(S.days[t]-1)>=GOAL;
+  let xp=0;
+  if(q===2){c.ok++;combo++;S.best.combo=Math.max(S.best.combo,combo);
+    if(wasDue){const was5=c.b===5;c.b=Math.min(5,c.b+1);c.due=t+(was5?21:INT[c.b])}xp=10+Math.min(combo,10);bump("ok");bump("combo",combo,true)}
+  else if(q===1){combo=0;c.b=Math.max(1,Math.min(c.b,3));c.due=t+(c.b>=2?1:0);xp=5}
+  else{combo=0;c.b=c.b>=4?2:1;c.due=t;xp=2}
+  if(boost())xp*=2;
+  S.bestStreak=Math.max(S.bestStreak||0,streak());
+  S.xp+=xp;bump("xp",xp);
+  if(!wasM&&c.b>=4)toast("Mot maîtrisé !",`${w.m} · ${masteredCount()} / ${N}`,"var(--green)",IC.star,false);
+  if(wasM&&c.b<4)toast("À consolider : "+w.m,"Il revient dans tes révisions, pas de panique.","var(--orange)",IC.bolt,false);
+  if(!goalBefore&&S.days[t]>=GOAL)toast("Objectif du jour atteint !","30 réponses aujourd'hui, bravo.","var(--green)",IC.target,true);
+  checkRewards(pg);save();return xp;
+}
+
+/* ---------- Navigation ---------- */
+let tab="learn";
+const app=document.getElementById("app"),nav=document.getElementById("nav");
+nav.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;sfx("tap");tab=b.dataset.tab;render()});
+function render(){stopTimers();nav.hidden=false;hideSheet();
+  nav.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.tab===tab));
+  ({learn:rLearn,train:rTrain,quests:rQuests,fam:rFam,profile:rProfile})[tab]();}
+function topbar(){
+  const st=streak(),todayOn=(S.days[TODAY()]||0)>0;
+  return `<header class="topbar">
+   <button class="stat s-star" data-go="profile" aria-label="Mots maîtrisés">${IC.star}${masteredCount()}<span class="muted small">/${N}</span></button>
+   <button class="stat s-fire ${todayOn?"":"off"}" data-go="quests" aria-label="Jours d'affilée">${IC.fire}${st}</button>
+   <button class="stat s-gem" data-go="quests" aria-label="Gemmes">${IC.gem}${S.gems}</button>
+   <button class="stat s-xp" data-go="profile" aria-label="XP">${IC.bolt}${S.xp}${boost()?'<span class="small">×2</span>':""}</button>
+  </header>`;
+}
+function bindTop(){app.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{tab=b.dataset.go;render()})}
+
+/* ---------- Apprendre : le parcours ---------- */
+const OFF=[0,48,72,48,0,-48,-72,-48];
+function rLearn(){
+  let cur=NODES.findIndex((n,i)=>nodeOpen(i)&&!nodeDone(n));
+  let html=topbar(),k=0;
+  UNITS.forEach((u,ui)=>{
+    const ws=u.words,m=ws.filter(isMastered).length;
+    html+=`<div class="unit" style="background:var(${u.c})"><div><small>${u.final?"Unité finale":"Unité "+(ui+1)} · ${m}/${ws.length} maîtrisés</small><h2>${esc(u.final?"Grand final : tout le lexique":"Lettres "+u.t)}</h2></div><div class="mini">${mascot(ui%2?"wow":"happy",52)}</div></div><div class="path">`;
+    NODES.forEach((n,i)=>{if(n.unit!==ui)return;
+      const open=nodeOpen(i),done=nodeDone(n),gold=nodeGold(n),isCur=i===cur;
+      const prog=n.words.filter(isMastered).length/n.words.length;
+      const icon=!open?IC.lock:gold?IC.crown:n.type==="review"?IC.trophy:done?IC.check:IC.star;
+      const style=open&&!gold?`--c:var(${u.c});--cd:var(${u.cd})`:"";
+      html+=`<div class="ringwrap" style="transform:translateX(${OFF[k%8]}px)">
+        ${isCur?`<span class="bubble" style="--c2:var(${u.c})">${done?"Rejouer":"Commencer"}</span>`:""}
+        ${open&&done&&!gold?`<svg class="ring" viewBox="0 0 98 98"><circle cx="49" cy="49" r="45" fill="none" stroke="var(--line)" stroke-width="7"/><circle cx="49" cy="49" r="45" fill="none" stroke="var(--yellow)" stroke-width="7" stroke-linecap="round" stroke-dasharray="${2*Math.PI*45}" stroke-dashoffset="${2*Math.PI*45*(1-prog)}"/></svg>`:""}
+        <button class="node ${!open?"locked":""} ${gold?"gold":""} ${n.type==="review"?"trophy":""}" style="${style}" data-n="${i}" aria-label="${n.type==="review"?"Révision":"Leçon"} : ${esc(n.words.slice(0,3).map(w=>w.m).join(", "))}">${icon}</button>
+      </div>`;k++});
+    html+=`</div>`;
+  });
+  html+=`<p class="small muted" style="text-align:center;margin-top:20px">Anneau jaune = part des mots de la leçon maîtrisés. Couronne = tous maîtrisés.</p>`;
+  app.innerHTML=html;bindTop();
+  app.querySelectorAll(".node").forEach(b=>b.onclick=()=>{const i=+b.dataset.n;
+    if(!nodeOpen(i)){b.classList.add("shake");setTimeout(()=>b.classList.remove("shake"),300);toast("Pas encore !","Termine d'abord l'étape précédente.","var(--line)",IC.lock);return}
+    sfx("tap");startNode(NODES[i])});
+  const c=app.querySelector(".bubble");if(c&&!window._scrolled){window._scrolled=1;c.scrollIntoView({block:"center"})}
+}
+
+/* ---------- Construction d'une leçon ---------- */
+function reviewWords(exclude,n){
+  const t=TODAY();const pool=W.filter(w=>seen(w)&&!exclude.includes(w));
+  const due=shuffle(pool.filter(w=>card(w).due<=t)).sort((a,b)=>B(a)-B(b));
+  const rest=shuffle(pool.filter(w=>card(w).due>t));
+  return [...due,...rest].slice(0,n);
+}
+function lessonSteps(node){
+  const ws=node.words,steps=[];
+  if(node.type==="lesson"){
+    ws.forEach(w=>{if(!seen(w)){steps.push({t:"intro",w});steps.push({t:"qcm",w})}});
+    const mid=shuffle(ws).map(w=>({t:seen(w)||steps.some(s=>s.w===w)?"auto":"qcmInv",w}));
+    const rev=reviewWords(ws,3).map(w=>({t:"auto",w,rev:true}));
+    const block=shuffle([...mid,...rev]);block.splice(Math.floor(block.length/2),0,{t:"pairs",ws:shuffle(ws).slice(0,5)});
+    steps.push(...block);
+    shuffle(ws).slice(0,3).forEach(w=>steps.push({t:"final",w}));
+  }else{
+    const pool=shuffle(ws).sort((a,b)=>B(a)-B(b));const sel=pool.slice(0,node.n||12);
+    sel.forEach(w=>steps.push({t:seen(w)?"auto":"intro",w}));
+    steps.splice(4,0,{t:"pairs",ws:shuffle(sel).slice(0,5)});
+  }
+  return steps;
+}
+function typeFor(step,run){
+  if(step.t!=="auto"&&step.t!=="final")return step.t;
+  const w=step.w,b=B(w),hits=run.hits[w.m]||0;
+  if(step.t==="final")return hits>=2||b>=2?"write":"qcm";
+  if(b<=1)return hits?pick(["qcm","flash"]):pick(["qcm","qcmInv"]);
+  if(b===2)return pick(["qcm","qcmInv","flash"]);
+  if(b===3)return pick(["qcm","write","flash"]);
+  return pick(["write","write","flash","qcm"]);
+}
+
+/* ---------- Moteur de leçon ---------- */
+let run=null,timers=[];
+function stopTimers(){timers.forEach(clearInterval);timers=[]}
+function startNode(node){startRun(lessonSteps(node),{node,title:node.type==="review"?"Révision":"Leçon"})}
+function startRun(steps,opt={}){
+  combo=0;run={steps,i:0,total:steps.length,mist:0,ok:0,n:0,xp:0,t0:Date.now(),hits:{},...opt};
+  nav.hidden=true;window.scrollTo(0,0);nextStep();
+}
+function lhead(){const p=run.i/run.total;
+  return `<div class="lhead"><button class="x" id="quit" aria-label="Quitter">${IC.x}</button><div class="lbar"><i style="width:${p*100}%"></i></div>${combo>=3?`<span class="combo">${IC.fire.replace('<svg','<svg width="18" height="18" style="vertical-align:-3px"')} ${combo}</span>`:""}</div>`}
+function bindQuit(){document.getElementById("quit").onclick=()=>{stopTimers();hideSheet();run=null;render()}}
+function nextStep(){
+  hideSheet();
+  if(run.i>=run.steps.length)return finishRun();
+  const s=run.steps[run.i];const t=typeFor(s,run);
+  ({intro:sIntro,qcm:sQcm,qcmInv:sQcmInv,write:sWrite,pairs:sPairs,flash:sFlash})[t](s);
+  window.scrollTo(0,0);
+}
+function advance(){run.i++;nextStep()}
+function requeue(s){const back={...s,t:s.t==="intro"?"qcm":s.t};run.steps.push(back);run.total=run.steps.length}
+function record(s,q){
+  const gain=answer(s.w,q);run.xp+=gain;run.n++;
+  if(q===2){run.ok++;run.hits[s.w.m]=(run.hits[s.w.m]||0)+1}else{run.mist++;requeue(s)}
+  return gain;
+}
+
+const OK_T=["Excellent !","Bien joué !","Parfait !","Super !","Bravo !","Exact !","Comme un chef !","Nickel !"];
+function showSheet(ok,inner,onNext,label="Continuer"){
+  sfx(ok?"ok":"ko");
+  const sh=document.getElementById("sheet");sh.className="sheet "+(ok?"ok":"ko");
+  document.getElementById("sheetIn").innerHTML=`<h3>${ok?IC.check:IC.x}${ok?pick(OK_T):"Pas tout à fait"}</h3><div class="scroll">${inner}</div><button class="b3 ${ok?"":"red"}" id="cont">${label}</button>`;
+  requestAnimationFrame(()=>sh.classList.add("show"));
+  const b=document.getElementById("cont");b.onclick=()=>{hideSheet();onNext()};setTimeout(()=>b.focus(),60);
+}
+function hideSheet(){const sh=document.getElementById("sheet");sh.classList.remove("show")}
+function spk(w){return `<button class="spk" data-say="${esc(w)}" aria-label="Écouter">${IC.sound}</button>`}
+function vid(m){return `<a class="vid" href="https://www.youtube.com/results?search_query=${encodeURIComponent("pâtisserie "+m+" technique")}" target="_blank" rel="noopener">${IC.play}Voir le geste en vidéo</a>`}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b)say(b.dataset.say)});
+function kick(s,label){return `<span class="kicker ${s.rev?"rev":""}">${s.rev?IC.bolt.replace('<svg','<svg width="16" height="16"')+" Révision d'un ancien mot":label}</span>`}
+function feedback(w,ok,extra=""){return `${extra}${ok?"":`<p class="t" style="font-weight:900">Réponse : ${esc(w.m)}</p><p class="def">${rich(w.d,null)}</p>`}${clair(w)}${vid(w.m)}`}
+
+function sIntro(s){
+  const w=s.w;
+  app.innerHTML=`<section class="lesson">${lhead()}
+   ${kick(s,"Nouveau mot")}
+   <div class="speech"><div class="wiggle">${mascot("wow",96)}</div><div class="say"><div class="wordbig">${esc(w.m)} ${spk(w.m)}</div></div></div>
+   <div class="def">${rich(w.d,null)}</div>${clair(w)}${vid(w.m)}
+   <p class="small muted">Lis-le à voix haute et imagine le geste. Les mots soulignés s'expliquent si tu les touches.</p>
+   <div class="lfoot"><button class="b3" id="go">J'ai compris</button></div></section>`;
+  bindQuit();say(w.m);
+  document.getElementById("go").onclick=()=>{sfx("tap");run.i++;run.total=Math.max(run.total,run.steps.length);nextStep()};
+}
+function distractors(w,n=3){
+  const fam=(famOf[w.m]||[]).flatMap(fi=>FAMS[fi].w).filter(m=>m!==w.m&&byM[m]);
+  const others=shuffle(W.filter(x=>x.m!==w.m&&!fam.includes(x.m))).map(x=>x.m);
+  return shuffle([...new Set([...shuffle(fam).slice(0,2),...others])]).slice(0,n);
+}
+function choose(s,opts,correct,prompt,one){
+  let sel=null;
+  app.innerHTML=`<section class="lesson">${lhead()}${kick(s,"Choisis la bonne réponse")}${prompt}
+   <div class="opts ${one?"one":""}">${opts.map((o,i)=>`<button class="opt" data-i="${i}" aria-pressed="false">${one?esc(o.label):esc(o.label)}</button>`).join("")}</div>
+   <div class="lfoot"><button class="b3" id="chk" disabled>Vérifier</button></div></section>`;
+  bindQuit();
+  const chk=document.getElementById("chk");
+  app.querySelector(".opts").onclick=e=>{const b=e.target.closest(".opt");if(!b||chk.dataset.done)return;sfx("tap");
+    app.querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");sel=+b.dataset.i;chk.disabled=false};
+  chk.onclick=()=>{if(sel===null||chk.dataset.done)return;chk.dataset.done=1;
+    const ok=opts[sel].m===correct;const btns=app.querySelectorAll(".opt");
+    btns.forEach((x,i)=>{if(opts[i].m===correct)x.classList.add("ok")});if(!ok){btns[sel].classList.add("ko","shake")}
+    const gain=record(s,ok?2:0);
+    const wrong=!ok?`<p class="small">Tu as choisi <b>${esc(opts[sel].m)}</b> : ${esc(EXPL[opts[sel].m]||byM[opts[sel].m].d)}</p>`:"";
+    showSheet(ok,feedback(s.w,ok,(ok?`<p class="t">+${gain} XP${combo>=3?` · série de ${combo} !`:""}</p>`:"")+wrong),advance)};
+}
+function sQcm(s){
+  const w=s.w,opts=shuffle([w.m,...distractors(w)]).map(m=>({m,label:m}));
+  choose(s,opts,w.m,`<p class="prompt">Quel mot correspond ?</p><div class="speech"><div>${mascot("happy",96)}</div><div class="say def">${rich(w.d,w)}</div></div>`,false);
+}
+function sQcmInv(s){
+  const w=s.w,opts=shuffle([w.m,...distractors(w,2)]).map(m=>({m,label:byM[m].d}));
+  choose(s,opts,w.m,`<p class="prompt">Que veut dire ce mot ?</p><div class="wordbig">${esc(w.m)} ${spk(w.m)}</div>`,true);
+}
+function sWrite(s){
+  const w=s.w;let hint=0;
+  app.innerHTML=`<section class="lesson">${lhead()}${kick(s,"Écris le mot")}
+   <div class="speech"><div>${mascot("happy",96)}</div><div class="say def">${rich(w.d,w)}</div></div>
+   <form id="wf"><input type="text" id="wi" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Tape le mot…" aria-label="Ta réponse"></form>
+   <button class="hintbtn" id="hint">Indice (${w.m.length} lettres)</button><p class="small muted" id="hv"></p>
+   <div class="lfoot"><button class="b3" id="chk">Vérifier</button></div></section>`;
+  bindQuit();const inp=document.getElementById("wi");inp.focus();
+  document.getElementById("hint").onclick=()=>{hint=Math.min(hint+1,3);const k=Math.ceil(w.m.length*hint/4);
+    document.getElementById("hv").textContent="Ça commence par : "+w.m.slice(0,k)+"…";inp.focus()};
+  const check=e=>{if(e)e.preventDefault();const chk=document.getElementById("chk");if(chk.dataset.done||!inp.value.trim())return;chk.dataset.done=1;
+    const a=norm(inp.value),b=norm(w.m),d=lev(a,b);
+    const exact=a===b,typo=!exact&&d===1&&b.length>=6;
+    const ok=exact||typo;const q=ok?(hint?1:2):0;
+    const gain=record(s,q);if(q===2){S.writeOk++;bump("write");checkRewards(gradeOf(masteredCount()))}
+    if(q===1){run.hits[w.m]=(run.hits[w.m]||0)+1}
+    const msg=typo?`<p class="t">Presque parfait, attention à l'orthographe : <b>${esc(w.m)}</b></p>`:ok?`<p class="t">${esc(w.m)} · +${gain} XP${hint?" (avec indice)":""}</p>`:`<p class="small">Tu as écrit : <b>${esc(inp.value)}</b></p>`;
+    showSheet(ok,feedback(w,ok,msg),advance)};
+  document.getElementById("wf").onsubmit=check;document.getElementById("chk").onclick=check;
+}
+function sFlash(s){
+  const w=s.w,inv=B(w)>=2&&Math.random()<.5;
+  app.innerHTML=`<section class="lesson">${lhead()}${kick(s,"Carte mémoire")}
+   <p class="prompt">${inv?"Quel est le mot ?":"Que veut dire ce mot ?"}</p>
+   ${inv?`<div class="speech"><div>${mascot("happy",96)}</div><div class="say def">${rich(w.d,w)}</div></div>`:`<div class="wordbig">${esc(w.m)} ${spk(w.m)}</div>`}
+   <p class="small muted">Dis la réponse à voix haute AVANT de retourner la carte. C'est l'effort de chercher qui fait retenir.</p>
+   <div id="back" hidden style="display:flex;flex-direction:column;gap:10px;border-top:2px dashed var(--line);padding-top:14px">${inv?`<div class="wordbig">${esc(w.m)} ${spk(w.m)}</div>`:""}<div class="def">${rich(w.d,null)}</div>${clair(w)}${vid(w.m)}</div>
+   <div class="lfoot" id="act"><button class="b3 blue" id="flip">Retourner la carte</button></div></section>`;
+  bindQuit();
+  document.getElementById("flip").onclick=()=>{sfx("tap");const bk=document.getElementById("back");bk.hidden=false;if(inv)say(w.m);
+    document.getElementById("act").innerHTML=`<p class="small muted" style="margin-bottom:8px;text-align:center">Sois honnête avec toi-même :</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><button class="b3 red smallbtn" data-r="0" style="width:100%">Pas su</button><button class="b3 orange smallbtn" data-r="1" style="width:100%">À peu près</button><button class="b3 smallbtn" data-r="2" style="width:100%">Je savais</button></div>`;
+    document.getElementById("act").onclick=e=>{const r=e.target.closest("[data-r]");if(!r)return;const q=+r.dataset.r;
+      record(s,q);sfx(q===2?"ok":q===1?"tap":"ko");
+      advance()}}
+}
+function sPairs(s){
+  const ws=s.ws;let sel=null,found=0,err=0;
+  const short=d=>d.length>95?d.slice(0,90).replace(/\s\S*$/,"")+"…":d;
+  const L=shuffle(ws),R=shuffle(ws);
+  app.innerHTML=`<section class="lesson">${lhead()}<span class="kicker">Associe les paires</span><p class="prompt">Touche un mot puis sa définition</p>
+   <div class="pairs"><div class="col">${L.map(w=>`<button class="pc w" data-m="${esc(w.m)}">${esc(w.m)}</button>`).join("")}</div>
+   <div class="col">${R.map(w=>`<button class="pc" data-d="${esc(w.m)}">${esc(short(w.d))}</button>`).join("")}</div></div></section>`;
+  bindQuit();
+  app.querySelector(".pairs").onclick=e=>{const b=e.target.closest(".pc");if(!b||b.classList.contains("done"))return;
+    if(b.dataset.m){app.querySelectorAll(".pc.w").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");sfx("tap");say(b.dataset.m);sel=b.dataset.m;return}
+    if(!sel)return;
+    if(b.dataset.d===sel){sfx("ok");app.querySelectorAll(`[data-m="${CSS.escape(sel)}"],[data-d="${CSS.escape(sel)}"]`).forEach(x=>{x.classList.remove("sel");x.classList.add("done","pop")});
+      found++;sel=null;S.xp+=4;run.xp+=4;bump("xp",4);
+      if(found===ws.length){if(!err)S.perfectPairs++;save();setTimeout(()=>showSheet(true,`<p class="t">${err?`${err} erreur${err>1?"s":""}, bien rattrapé !`:"Toutes les paires du premier coup !"} · +${4*ws.length} XP</p>`,advance),250)}}
+    else{err++;run.mist++;sfx("ko");b.classList.add("bad","shake");setTimeout(()=>b.classList.remove("bad","shake"),450)}};
+}
+function finishRun(){
+  stopTimers();hideSheet();
+  const r=run;run=null;const acc=r.n?Math.round(r.ok/r.n*100):100;const secs=Math.round((Date.now()-r.t0)/1000);
+  const perfect=r.mist===0&&r.n>0;
+  if(r.node){const first=!S.done[r.node.id];S.done[r.node.id]=(S.done[r.node.id]||0)+1;bump("lessons");
+    if(first){S.gems+=r.node.type==="review"?20:5}
+    if(perfect){S.perfects++;bump("perfect");S.gems+=5}}
+  if(r.kind==="review")bump("review");
+  save();checkRewards(gradeOf(masteredCount()));
+  sfx("done");confetti();
+  const title=perfect?"Leçon parfaite !":acc>=80?"Leçon terminée !":"Bien joué, tu progresses !";
+  app.innerHTML=`<section class="endscreen">${mascot("wow",150)}<h1>${title}</h1>
+   <p class="muted">${perfect?"Zéro faute. Chouquette est fière de toi.":r.mist?"Les mots ratés reviendront bientôt : c'est comme ça qu'on les retient.":""}</p>
+   <div class="kpis">
+    <div class="kpi" style="--c:var(--yellow-d)"><small>Total XP</small><b>${r.xp}</b></div>
+    <div class="kpi" style="--c:var(--green)"><small>${acc>=90?"Génial":"Précision"}</small><b>${acc} %</b></div>
+    <div class="kpi" style="--c:var(--blue)"><small>Temps</small><b>${Math.floor(secs/60)}:${String(secs%60).padStart(2,"0")}</b></div>
+   </div>
+   <p><b>${masteredCount()} / ${N}</b> mots maîtrisés</p>
+   <button class="b3" id="go">Continuer</button></section>`;
+  document.getElementById("go").onclick=()=>{window._scrolled=0;render()};
+}
+
+/* ---------- Entraîner ---------- */
+function rTrain(){
+  const due=W.filter(w=>seen(w)&&card(w).due<=TODAY()).length;
+  const weak=W.filter(w=>seen(w)&&B(w)<=2).length, nseen=W.filter(seen).length;
+  const tile=(id,c,ic,t,s)=>`<button class="tile" data-t="${id}"><span class="ic" style="background:var(${c})">${ic}</span><span><b>${t}</b><span>${s}</span></span><span aria-hidden="true" class="muted">›</span></button>`;
+  app.innerHTML=topbar()+`
+   <div class="speech" style="margin-bottom:16px"><div>${mascot(due?"happy":"wow",90)}</div><div class="say">${due?`<b>${due} mot${due>1?"s":""}</b> t'attendent pour leur révision du jour. C'est le plus important pour ne rien oublier !`:nseen?"Tout est révisé pour aujourd'hui ! Un petit Chrono pour le plaisir ?":"Commence par la première leçon dans Apprendre, puis reviens ici."}</div></div>
+   <div class="tiles">
+    ${tile("review","--orange",IC.bolt,"Révision du jour",due?`${due} mot${due>1?"s":""} à revoir, tous les anciens mots compris`:"Rien à revoir aujourd'hui")}
+    ${tile("weak","--red",IC.target,"Mots fragiles",weak?`${weak} mot${weak>1?"s":""} encore difficiles`:"Aucun mot fragile, bravo")}
+    ${tile("flash","--pink",IC.cards,"Cartes mémoire","Retrouve la réponse dans ta tête, à voix haute")}
+    ${tile("chrono","--purple",IC.clock,"Chrono 60 s","Record : "+S.best.chrono)}
+    ${tile("write","--blue",IC.pen,"Dictée inversée","La définition, tu écris le mot")}
+    ${tile("pairs","--green",IC.target,"Paires","3 séries de 5 mots, maîtrisés compris")}
+   </div>`;
+  bindTop();
+  app.querySelectorAll(".tile").forEach(b=>b.onclick=()=>{sfx("tap");const t=b.dataset.t;
+    const pool=W.filter(seen);if(!pool.length){toast("Pas encore de mots vus","Fais d'abord une leçon dans Apprendre.","var(--blue)",IC.star);return}
+    if(t==="review"){const ws=shuffle(W.filter(w=>seen(w)&&card(w).due<=TODAY())).sort((a,b)=>B(a)-B(b)).slice(0,15);
+      const list=ws.length?ws:circular(10);startRun(list.map(w=>({t:"auto",w,rev:true})),{kind:"review"})}
+    if(t==="weak"){const ws=shuffle(W.filter(w=>seen(w)&&B(w)<=2)).slice(0,12);startRun((ws.length?ws:circular(10)).map(w=>({t:"auto",w})))}
+    if(t==="flash")startRun(circular(12).map(w=>({t:"flash",w})));
+    if(t==="write")startRun(circular(10).map(w=>({t:"write",w})));
+    if(t==="pairs"){const ws=circular(15);startRun([0,1,2].map(i=>({t:"pairs",ws:ws.slice(i*5,i*5+5)})).filter(s=>s.ws.length>=3))}
+    if(t==="chrono")startChrono();});
+}
+function circular(n){const s=W.filter(seen);const base=s.length>=6?s:W;const weak=shuffle(base.filter(w=>!isMastered(w))),strong=shuffle(base.filter(isMastered));
+  const out=[];while(out.length<n&&(weak.length||strong.length)){if(weak.length)out.push(weak.shift());if(strong.length&&out.length<n)out.push(strong.shift())}return shuffle(out)}
+
+function startChrono(){
+  nav.hidden=true;combo=0;const pool=circular(80);let i=0,score=0,left=60,lock=false,ok=0,n=0;
+  const draw=()=>{const w=pool[i%pool.length];const opts=shuffle([w.m,...distractors(w)]);
+    app.innerHTML=`<section class="lesson"><div class="lhead"><button class="x" id="q" aria-label="Arrêter">${IC.x}</button><div class="lbar"><i style="width:${left/60*100}%;background:var(--purple)"></i></div><span class="timer">${left}s</span></div>
+     <p class="kicker">Score ${score} · record ${S.best.chrono}${combo>=3?` · série ${combo}`:""}</p>
+     <div class="speech"><div>${mascot("wow",80)}</div><div class="say def">${rich(w.d,w)}</div></div>
+     <div class="opts">${opts.map(o=>`<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div></section>`;
+    document.getElementById("q").onclick=end;
+    app.querySelector(".opts").onclick=e=>{const b=e.target.closest(".opt");if(!b||lock)return;lock=true;const good=b.dataset.o===w.m;n++;
+      app.querySelectorAll(".opt").forEach(x=>{if(x.dataset.o===w.m)x.classList.add("ok")});if(!good)b.classList.add("ko");
+      sfx(good?"ok":"ko");answer(w,good?2:0);if(good){ok++;score+=1+Math.floor(combo/5)}
+      setTimeout(()=>{lock=false;i++;if(left>0)draw()},good?300:1000)}};
+  const end=()=>{stopTimers();const rec=score>S.best.chrono;if(rec)S.best.chrono=score;bump("chrono",score,true);save();checkRewards(gradeOf(masteredCount()));
+    sfx("done");if(rec&&score)confetti();
+    app.innerHTML=`<section class="endscreen">${mascot(score?"wow":"happy",140)}<h1>${rec?"Nouveau record !":"Temps écoulé !"}</h1>
+     <div class="kpis"><div class="kpi" style="--c:var(--purple)"><small>Score</small><b>${score}</b></div><div class="kpi" style="--c:var(--green)"><small>Justes</small><b>${ok}/${n}</b></div><div class="kpi" style="--c:var(--yellow-d)"><small>Record</small><b>${S.best.chrono}</b></div></div>
+     <button class="b3 purple" id="again">Rejouer</button><button class="b3 ghost" id="go">Retour</button></section>`;
+    document.getElementById("again").onclick=startChrono;document.getElementById("go").onclick=render};
+  draw();timers.push(setInterval(()=>{left--;const t=app.querySelector(".timer");if(t)t.textContent=left+"s";const bar=app.querySelector(".lbar i");if(bar)bar.style.width=left/60*100+"%";if(left<=0)end()},1000));
+}
+
+/* ---------- Calendrier des jours joués ---------- */
+const totalDays=()=>Object.keys(S.days).filter(d=>S.days[d]>0).length;
+let calOff=0;
+function calendar(){
+  const now=new Date(),m=new Date(now.getFullYear(),now.getMonth()+calOff,1);
+  const name=m.toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+  const first=(m.getDay()+6)%7,len=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),t=TODAY();
+  let cells="";for(let i=0;i<first;i++)cells+="<span></span>";
+  let count=0;
+  for(let d=1;d<=len;d++){const dn=dayNum(new Date(m.getFullYear(),m.getMonth(),d,12));const on=(S.days[dn]||0)>0,fr=S.frozen.includes(dn);if(on)count++;
+    cells+=`<span class="cd ${on?"on":fr?"fr":""} ${dn===t?"today":""}" title="${on?S.days[dn]+" réponses":""}">${on?IC.fire:fr?IC.ice:d}</span>`}
+  return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><button class="chip" id="calP" aria-label="Mois précédent">‹</button><h2 style="text-transform:capitalize">${name}</h2><button class="chip" id="calN" aria-label="Mois suivant" ${calOff>=0?"disabled":""}>›</button></div>
+   <p class="small muted" style="text-align:center">${count} jour${count>1?"s":""} joué${count>1?"s":""} ce mois-ci</p>
+   <div class="cal">${["L","M","M","J","V","S","D"].map(x=>`<b>${x}</b>`).join("")}${cells}</div>`;
+}
+document.addEventListener("click",e=>{if(e.target.id==="calP"){calOff--;rQuests()}if(e.target.id==="calN"&&calOff<0){calOff++;rQuests()}});
+
+/* ---------- Quêtes et boutique ---------- */
+function rQuests(){
+  const q=Q(),qs=todaysQuests(),st=streak(),today=S.days[TODAY()]||0;
+  const chest=done=>`<svg class="chest" viewBox="0 0 44 44"><rect x="4" y="16" width="36" height="24" rx="4" fill="${done?"var(--yellow)":"var(--line)"}"/><path d="M4 18a10 10 0 0 1 10-10h16a10 10 0 0 1 10 10v4H4z" fill="${done?"var(--orange)":"var(--muted)"}" opacity=".9"/><rect x="18" y="20" width="8" height="8" rx="2" fill="#fff"/></svg>`;
+  app.innerHTML=topbar()+`
+   <section class="panel" style="background:var(--orange);border-color:var(--orange-d);color:#fff">
+    <div style="display:flex;align-items:center;gap:14px"><span style="width:56px;height:56px;color:#fff">${IC.fire.replace('<svg','<svg width="56" height="56"')}</span>
+    <div><p class="big">${st}</p><p>jour${st>1?"s":""} d'affilée${today?"":" · joue aujourd'hui pour la garder !"}</p></div></div>
+    <p class="small">${totalDays()} jour${totalDays()>1?"s":""} de connexion au total · record de série : ${Math.max(S.bestStreak||0,st)} · ${S.freezes?`${S.freezes} gel${S.freezes>1?"s":""} en réserve`:"aucun gel en réserve"}</p>
+   </section>
+   <section class="panel">${calendar()}</section>
+   <section class="panel"><h2>Quêtes du jour</h2>
+    ${[{n:`Objectif : ${GOAL} réponses`,goal:GOAL,v:today,id:"goal"},...qs.map(x=>({n:x.n,goal:x.goal,v:q[x.k]||0,id:x.id}))].map(x=>{const v=Math.min(x.v,x.goal);const done=v>=x.goal;
+      return `<div class="quest"><div><b>${esc(x.n)}</b><div class="qbar"><i style="width:${v/x.goal*100}%"></i><span>${v} / ${x.goal}</span></div></div>${chest(done)}</div>`}).join("")}
+    <p class="small muted">Chaque quête rapporte 10 gemmes, et les 3 ensemble ouvrent un coffre de 20 gemmes. Nouvelles quêtes demain.</p>
+   </section>
+   <section class="panel"><h2>Boutique</h2>
+    <div class="shopitem"><span class="tile" style="padding:0;border:0"><span class="ic" style="background:var(--blue)">${IC.ice}</span></span><div><b>Gel de série</b><p class="small muted">Protège ta série si tu oublies un jour (2 max).</p></div>
+     <button class="b3 blue smallbtn" id="buyF" ${S.gems<30||S.freezes>=2?"disabled":""}><span class="price" style="color:inherit">${IC.gem}30</span></button></div>
+    <div class="shopitem"><span class="tile" style="padding:0;border:0"><span class="ic" style="background:var(--purple)">${IC.bolt}</span></span><div><b>Double XP · 15 min</b><p class="small muted">${boost()?"Actif encore "+Math.ceil((S.boostUntil-Date.now())/60000)+" min !":"Toutes tes réponses rapportent 2 fois plus d'XP."}</p></div>
+     <button class="b3 purple smallbtn" id="buyB" ${S.gems<40||boost()?"disabled":""}><span class="price" style="color:inherit">${IC.gem}40</span></button></div>
+    <p class="small muted">Gagne des gemmes avec les quêtes, les badges, les leçons parfaites et les trophées d'unité.</p>
+   </section>`;
+  bindTop();
+  document.getElementById("buyF").onclick=()=>{if(S.gems<30||S.freezes>=2)return;S.gems-=30;S.freezes++;save();sfx("quest");toast("Gel de série acheté","Ta série est protégée.","var(--blue)",IC.ice);rQuests()};
+  document.getElementById("buyB").onclick=()=>{if(S.gems<40||boost())return;S.gems-=40;S.boostUntil=Date.now()+15*60000;save();sfx("level");toast("Double XP activé !","15 minutes pour tout donner.","var(--purple)",IC.bolt,true);rQuests()};
+}
+
+/* ---------- Pièges ---------- */
+function rFam(){
+  app.innerHTML=topbar()+`<div class="speech" style="margin-bottom:14px"><div>${mascot("happy",86)}</div><div class="say">Ces mots se ressemblent : c'est là qu'on se trompe le jour J. Lis l'astuce, puis touche « Cacher » et récite chaque définition.</div></div>`+
+  FAMS.map((f,i)=>`<section class="panel fam" id="f${i}"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>${esc(f.t)}</h2><button class="chip" data-hide="${i}" aria-pressed="false">Cacher</button></div><p class="tip">${esc(f.tip)}</p><dl>${f.w.map(m=>`<dt>${esc(m)} ${spk(m).replace('class="spk"','class="spk" style="width:34px;height:30px;display:inline-grid;vertical-align:middle;border-bottom-width:3px"')}</dt><dd>${rich(byM[m].d,null)}${clair(byM[m])}</dd>`).join("")}</dl></section>`).join("");
+  bindTop();
+  app.onclick=e=>{if(tab!=="fam")return;const b=e.target.closest("[data-hide]");if(b){const s=document.getElementById("f"+b.dataset.hide);b.setAttribute("aria-pressed",s.classList.toggle("hide"));return}
+    const dd=e.target.closest(".fam.hide dd");if(dd){dd.style.color="var(--muted)";dd.style.background="none";dd.querySelectorAll("*").forEach(x=>x.style.visibility="visible")}};
+}
+
+/* ---------- Profil ---------- */
+const WEEKS=[["15–21 oct","Unité 1 · A et B"],["22–28 oct","Unité 2 · C"],["29 oct–4 nov","Unité 3 · D, E, F"],["5–11 nov","Unité 4 · G à M"],["12–18 nov","Unité 5 · N, P, R"],["19–25 nov","Unité 6 · S à Z"],["26 nov–1er déc","Grand final + révisions"]];
+function rProfile(){
+  const k=masteredCount(),g=gradeOf(k),t=TODAY(),next=GRADES[g+1];
+  const starts=[[9,15],[9,22],[9,29],[10,5],[10,12],[10,19],[10,26]];let now=-1;const d=new Date();starts.forEach(([mo,dd],i)=>{if(d>=new Date(2026,mo,dd))now=i});
+  const nextLabel=w=>{const c=S.cards[w.m];if(!c||!c.n)return"pas encore vu";const x=c.due-t;return x<=0?"à revoir aujourd'hui":x===1?"revient demain":`revient dans ${x} j`};
+  app.innerHTML=topbar()+`
+   <section class="panel" style="align-items:center;text-align:center">${mascot(k>=40?"wow":"happy",110)}
+    <p class="kicker" style="color:var(--purple-d)">${esc(GRADES[g].n)}</p><p class="big" style="color:var(--green-ink)">${k}<span class="muted" style="font-size:1.3rem"> / ${N}</span></p><p>mots maîtrisés</p>
+    <div class="qbar" style="width:100%"><i style="width:${k/N*100}%;background:var(--green)"></i></div>
+    <p class="small muted">${next?`Encore ${next.at-k} mot${next.at-k>1?"s":""} pour devenir ${esc(next.n)}.`:"Grade maximum. Continue les révisions pour tout garder."}</p></section>
+   <section class="panel"><h2>Grades</h2><div class="ladder">${GRADES.map((x,i)=>`<div class="rung ${i<g?"on":i===g?"cur":""}"><i>${i+1}</i><span><b>${esc(x.n)}</b><br><small class="muted">${esc(x.d)}</small></span><small>${x.at} mots</small></div>`).join("")}</div></section>
+   <section class="panel"><h2>Badges · ${Object.keys(S.badges).filter(id=>BADGES.some(b=>b[0]===id)).length}/${BADGES.length}</h2><div class="badges">${BADGES.map(([id,n,dsc,ic,c])=>`<div class="bd ${S.badges[id]?"on":""}" style="--c:var(${c})"><span class="medal">${S.badges[id]?ic:IC.lock}</span><b>${esc(n)}</b><small>${esc(dsc)}</small></div>`).join("")}</div>
+    <p class="small muted">${totalDays()} jours de connexion · série actuelle ${streak()} j · Meilleure série de réponses : ${S.best.combo} · Record Chrono : ${S.best.chrono} · ${S.xp} XP</p></section>
+   <section class="panel"><h2>Lettres</h2><div class="letters">${LETTERS.map(l=>{const ws=W.filter(w=>w.l===l),m=ws.filter(isMastered).length;return `<div class="lt ${m===ws.length?"full":""}"><div class="f" style="height:${m/ws.length*100}%"></div><b>${l}</b><small>${m}/${ws.length}</small></div>`}).join("")}</div></section>
+   <section class="panel"><h2>Plan jusqu'au 1er décembre</h2>${WEEKS.map((w,i)=>`<div class="week ${i===now?"now":""}"><span class="d">${w[0]}</span><span>${w[1]}${i===now?' <span class="pill p4">cette semaine</span>':""}</span></div>`).join("")}</section>
+   <section class="panel"><h2>Pourquoi ça marche</h2><ol>
+    <li><b>On se teste au lieu de relire.</b> Chercher la réponse, même en se trompant, fait retenir bien plus.</li>
+    <li><b>Les mots reviennent au bon moment.</b> Raté : il revient dans la leçon. Su : demain, puis 3, 7, 14, 21 jours. Même maîtrisé, un mot revient.</li>
+    <li><b>De plus en plus dur.</b> D'abord choisir parmi 3 ou 4 réponses, puis retrouver la réponse de tête (cartes mémoire), puis écrire le mot sans aide.</li>
+    <li><b>On mélange.</b> Chaque leçon glisse d'anciens mots, et les fausses réponses sont des mots qui se ressemblent.</li>
+    <li><b>Un peu chaque jour.</b> 10 à 15 minutes. La série et les quêtes sont là pour ça.</li></ol></section>
+   <section class="panel"><h2>Tous les mots</h2><div class="wl">${W.slice().sort((a,b)=>B(a)-B(b)||a.m.localeCompare(b.m)).map(w=>`<div class="wi"><span><b>${esc(w.m)}</b><br><small>${nextLabel(w)}</small></span><span class="pill p${B(w)}">${STATE[B(w)]}</span></div>`).join("")}</div></section>
+   <section class="panel"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>Sons</b><button class="chip" id="snd" aria-pressed="${S.sound}">${S.sound?"Activés":"Coupés"}</button></div>
+    <p class="small muted">La progression est enregistrée sur ce téléphone. <button class="linkbtn" id="rst">Tout remettre à zéro</button></p></section>`;
+  bindTop();
+  document.getElementById("snd").onclick=()=>{S.sound=!S.sound;save();rProfile()};
+  document.getElementById("rst").onclick=function(){if(this.dataset.c){S=JSON.parse(JSON.stringify(DEF));save();rProfile()}else{this.dataset.c=1;this.textContent="Sûr ? Touche encore pour tout effacer"}};
+}
+
+applyFreeze();render();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+</script>
+
+</body>
+</html>
