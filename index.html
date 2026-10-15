@@ -151,6 +151,18 @@ ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px}
 .cd.fr{background:var(--blue-soft);color:var(--blue-ink)}
 .cd.today{box-shadow:0 0 0 2px var(--ink) inset}
 .cd.on.today{box-shadow:0 0 0 3px var(--orange-d) inset}
+.kws{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.kw{border-radius:10px;padding:3px 10px;font-weight:800;font-size:.85rem;border:2px solid var(--line)}
+.kw.key{background:var(--yellow-soft);border-color:var(--yellow);color:var(--ink)}
+.kw.on{background:var(--green-soft);border-color:var(--green);color:var(--green-ink)}
+.kw.off{background:var(--red-soft);border-color:var(--red);color:var(--red-ink)}
+textarea{width:100%;font:700 1.05rem var(--font);padding:12px 14px;border-radius:16px;border:2px solid var(--line);background:var(--sunk);color:var(--ink);resize:vertical}
+.exrow{border:2px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.exrow.ok{border-color:var(--green)} .exrow.mid{border-color:var(--orange)} .exrow.ko{border-color:var(--red)}
+.exh{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.wk div{display:flex;flex-direction:column;align-items:center;gap:2px}
+.wk .cd{width:100%;max-width:44px}
 /* Leçon */
 .lesson{min-height:100%;display:flex;flex-direction:column;gap:18px;padding-top:14px}
 .lhead{display:flex;align-items:center;gap:12px}
@@ -168,6 +180,13 @@ ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px}
 .wordbig{font-size:2.3rem;font-weight:900;line-height:1.05;overflow-wrap:anywhere;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .spk{background:var(--blue);color:#fff;border:0;border-bottom:4px solid var(--blue-d);border-radius:14px;width:48px;height:44px;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
 .spk svg{width:26px;height:26px}
+.spk-s{display:inline-grid;width:36px;height:32px;border-bottom-width:3px;vertical-align:middle;margin-left:4px}
+.spk-s svg{width:20px;height:20px}
+.cta{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:center;border:2px solid var(--line);border-bottom-width:4px;border-radius:18px;padding:12px;margin-bottom:6px}
+.cta p b{color:var(--orange-d)}
+.streakbox{display:flex;align-items:center;gap:12px;background:var(--orange-soft);border-radius:16px;padding:12px 16px;width:100%;text-align:left}
+.streakbox .f{color:var(--orange);width:46px;height:46px;flex:0 0 auto}
+.streakbox b{font-size:1.3rem}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .opts.one{grid-template-columns:1fr}
 .opt{border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;background:var(--surface);color:var(--ink);font-weight:800;font-size:1.05rem;padding:14px 12px;cursor:pointer;text-align:center;min-height:62px}
@@ -238,7 +257,7 @@ input[type=text]{width:100%;font:800 1.3rem var(--font);padding:14px 16px;border
   <button data-tab="fam" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-4 12.7V18h8v-3.3A7 7 0 0 0 12 2z"/><rect x="9" y="19" width="6" height="3" rx="1"/></svg>Pièges</button>
   <button data-tab="profile" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4.5"/><path d="M3 21c0-4.4 4-7 9-7s9 2.6 9 7z"/></svg>Profil</button>
 </div></nav>
-<div class="sheet" id="sheet" aria-live="polite"><div class="in" id="sheetIn"></div></div>
+<div class="sheet" id="sheet" aria-live="polite" hidden><div class="in" id="sheetIn"></div></div>
 
 <script>
 const RAW = [
@@ -598,7 +617,7 @@ const isMastered=w=>B(w)>=4;
 const masteredCount=()=>W.filter(isMastered).length;
 const STATE=["Nouveau","À découvrir","En cours","Presque","Maîtrisé","Ancré"];
 const INT=[0,0,1,3,7,14];
-const GOAL=30;
+const GOAL=30,GOAL2=60;
 
 const GRADES=[
  {n:"Apprenti",at:0,d:"On découvre le métier."},{n:"Aspirant",at:15,d:"Les bases sont posées."},
@@ -656,6 +675,8 @@ const BADGES=[
  ["m80","80 mots","80 mots maîtrisés",IC.star,"--orange",()=>masteredCount()>=80],
  ["mall","Lexique complet","Tous maîtrisés",IC.crown,"--yellow",()=>masteredCount()>=N],
  ["goal","Objectif du jour","30 réponses en un jour",IC.target,"--green",()=>(S.days[TODAY()]||0)>=GOAL],
+ ["ex16","Prêt pour le jour J","16/20 à un examen blanc",IC.trophy,"--yellow",()=>(S.exams||[]).some(e=>e.s>=16)],
+ ["goal2","Marathonien","60 réponses en un jour",IC.target,"--purple",()=>(S.days[TODAY()]||0)>=GOAL2],
  ["s3","En feu","3 jours d'affilée",IC.fire,"--orange",()=>streak()>=3],
  ["s7","Une semaine","7 jours d'affilée",IC.fire,"--orange",()=>streak()>=7],
  ["s14","Inarrêtable","14 jours d'affilée",IC.fire,"--red",()=>streak()>=14],
@@ -681,7 +702,10 @@ function sfx(kind){if(!S.sound)return;try{AC=AC||new (window.AudioContext||windo
   seq.forEach(([f,t])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=kind==="ko"?"sawtooth":"triangle";o.frequency.value=f;
     const s=AC.currentTime+t;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(kind==="ko"?.06:.13,s+.01);g.gain.exponentialRampToValueAtTime(.001,s+(kind==="tap"?.06:.22));
     o.connect(g).connect(AC.destination);o.start(s);o.stop(s+.25)})}catch(e){}}
-function say(t){try{const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+let FRV=null;function frVoice(){try{if(!FRV){const v=speechSynthesis.getVoices().filter(x=>/^fr/i.test(x.lang));FRV=v.find(x=>/fr-FR/i.test(x.lang)&&/Amélie|Thomas|Audrey|Google/i.test(x.name))||v.find(x=>/fr-FR/i.test(x.lang))||v[0]||null}}catch(e){}return FRV}
+function say(t,queue){if(S.voice===false)return;try{if(!queue)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";const v=frVoice();if(v)u.voice=v;u.rate=.92;speechSynthesis.speak(u)}catch(e){}}
+function sayAlways(t){const was=S.voice;S.voice=true;say(t);S.voice=was}
+try{speechSynthesis.onvoiceschanged=()=>{FRV=null}}catch(e){}
 
 /* ---------- Toasts et confettis ---------- */
 let toastQ=[],toastBusy=false;
@@ -713,7 +737,9 @@ function answer(w,q){
   S.xp+=xp;bump("xp",xp);
   if(!wasM&&c.b>=4)toast("Mot maîtrisé !",`${w.m} · ${masteredCount()} / ${N}`,"var(--green)",IC.star,false);
   if(wasM&&c.b<4)toast("À consolider : "+w.m,"Il revient dans tes révisions, pas de panique.","var(--orange)",IC.bolt,false);
-  if(!goalBefore&&S.days[t]>=GOAL)toast("Objectif du jour atteint !","30 réponses aujourd'hui, bravo.","var(--green)",IC.target,true);
+  if(!goalBefore&&S.days[t]>=GOAL)toast("Objectif du jour atteint !","Tu peux viser le super objectif : 60 réponses !","var(--green)",IC.target,true);
+  if(S.days[t]===GOAL2){S.gems+=15;toast("Super objectif atteint !","60 réponses aujourd'hui · +15 gemmes","var(--purple)",IC.crown,true)}
+  S.mh=S.mh||{};S.mh[t]=masteredCount();
   checkRewards(pg);save();return xp;
 }
 
@@ -721,9 +747,9 @@ function answer(w,q){
 let tab="learn";
 const app=document.getElementById("app"),nav=document.getElementById("nav");
 nav.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;sfx("tap");tab=b.dataset.tab;render()});
-function render(){stopTimers();nav.hidden=false;hideSheet();
+function render(){stopTimers();closeKeyboard();nav.hidden=false;hideSheet();
   nav.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.tab===tab));
-  ({learn:rLearn,train:rTrain,quests:rQuests,fam:rFam,profile:rProfile})[tab]();}
+  ({learn:rLearn,train:rTrain,quests:rQuests,fam:rFam,profile:rProfile,bilan:rBilan,backup:rBackup})[tab]();}
 function topbar(){
   const st=streak(),todayOn=(S.days[TODAY()]||0)>0;
   return `<header class="topbar">
@@ -737,9 +763,19 @@ function bindTop(){app.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{t
 
 /* ---------- Apprendre : le parcours ---------- */
 const OFF=[0,48,72,48,0,-48,-72,-48];
+function nudge(){
+  const t=TODAY(),today=S.days[t]||0,due=W.filter(w=>seen(w)&&card(w).due<=t).length,st=streak(),k=masteredCount(),g=gradeOf(k),next=GRADES[g+1];
+  if(!today)return st?`Ta série est de <b>${st} jour${st>1?"s":""}</b>. Fais une leçon aujourd'hui pour ne pas la perdre !`:"Prêt pour ta première leçon du jour ? 5 minutes suffisent !";
+  if(due)return `<b>${due} mot${due>1?"s":""}</b> t'attendent pour leur révision. C'est ce qui les fait rester dans ta tête !`;
+  if(today<GOAL)return `Encore <b>${GOAL-today} réponses</b> pour remplir ton objectif du jour. Allez, une leçon de plus !`;
+  if(today<GOAL2)return `Objectif rempli, bravo ! Encore <b>${GOAL2-today}</b> pour le super objectif et 15 gemmes.`;
+  if(next)return `Quelle journée ! Plus que <b>${next.at-k} mot${next.at-k>1?"s":""}</b> à maîtriser pour devenir ${esc(next.n)}.`;
+  return "Tu es au sommet ! Garde ta série chaque jour pour tout retenir.";
+}
 function rLearn(){
   let cur=NODES.findIndex((n,i)=>nodeOpen(i)&&!nodeDone(n));
-  let html=topbar(),k=0;
+  const due=W.filter(w=>seen(w)&&card(w).due<=TODAY()).length;
+  let html=topbar()+`<div class="cta"><div>${mascot((S.days[TODAY()]||0)>=GOAL?"wow":"happy",72)}</div><div style="display:flex;flex-direction:column;gap:8px"><p>${nudge()}</p>${due?`<button class="b3 orange smallbtn" id="revNow">Réviser ${due} mot${due>1?"s":""}</button>`:""}</div></div>`,k=0;
   UNITS.forEach((u,ui)=>{
     const ws=u.words,m=ws.filter(isMastered).length;
     html+=`<div class="unit" style="background:var(${u.c})"><div><small>${u.final?"Unité finale":"Unité "+(ui+1)} · ${m}/${ws.length} maîtrisés</small><h2>${esc(u.final?"Grand final : tout le lexique":"Lettres "+u.t)}</h2></div><div class="mini">${mascot(ui%2?"wow":"happy",52)}</div></div><div class="path">`;
@@ -757,6 +793,7 @@ function rLearn(){
   });
   html+=`<p class="small muted" style="text-align:center;margin-top:20px">Anneau jaune = part des mots de la leçon maîtrisés. Couronne = tous maîtrisés.</p>`;
   app.innerHTML=html;bindTop();
+  const rv=document.getElementById("revNow");if(rv)rv.onclick=()=>startReview();
   app.querySelectorAll(".node").forEach(b=>b.onclick=()=>{const i=+b.dataset.n;
     if(!nodeOpen(i)){b.classList.add("shake");setTimeout(()=>b.classList.remove("shake"),300);toast("Pas encore !","Termine d'abord l'étape précédente.","var(--line)",IC.lock);return}
     sfx("tap");startNode(NODES[i])});
@@ -773,12 +810,15 @@ function reviewWords(exclude,n){
 function lessonSteps(node){
   const ws=node.words,steps=[];
   if(node.type==="lesson"){
-    ws.forEach(w=>{if(!seen(w)){steps.push({t:"intro",w});steps.push({t:"qcm",w})}});
-    const mid=shuffle(ws).map(w=>({t:seen(w)||steps.some(s=>s.w===w)?"auto":"qcmInv",w}));
-    const rev=reviewWords(ws,3).map(w=>({t:"auto",w,rev:true}));
-    const block=shuffle([...mid,...rev]);block.splice(Math.floor(block.length/2),0,{t:"pairs",ws:shuffle(ws).slice(0,5)});
-    steps.push(...block);
-    shuffle(ws).slice(0,3).forEach(w=>steps.push({t:"final",w}));
+    // Chaque nouveau mot : présentation, puis UNE question un peu plus tard (pas juste après)
+    const news=shuffle(ws.filter(w=>!seen(w))),olds=shuffle(ws.filter(seen));
+    news.forEach((w,i)=>{steps.push({t:"intro",w});if(i>=1)steps.push({t:"auto",w:news[i-1]})});
+    const tail=[];
+    if(news.length)tail.push({t:"auto",w:news[news.length-1]});
+    olds.forEach(w=>tail.push({t:"auto",w}));
+    reviewWords(ws,3).forEach(w=>tail.push({t:"auto",w,rev:true}));
+    steps.push(...shuffle(tail));
+    if(ws.length>=3)steps.push({t:"pairs",ws:shuffle(ws).slice(0,5)});
   }else{
     const pool=shuffle(ws).sort((a,b)=>B(a)-B(b));const sel=pool.slice(0,node.n||12);
     sel.forEach(w=>steps.push({t:seen(w)?"auto":"intro",w}));
@@ -787,13 +827,252 @@ function lessonSteps(node){
   return steps;
 }
 function typeFor(step,run){
-  if(step.t!=="auto"&&step.t!=="final")return step.t;
+  if(step.t!=="auto")return step.t;
   const w=step.w,b=B(w),hits=run.hits[w.m]||0;
-  if(step.t==="final")return hits>=2||b>=2?"write":"qcm";
   if(b<=1)return hits?pick(["qcm","flash"]):pick(["qcm","qcmInv"]);
-  if(b===2)return pick(["qcm","qcmInv","flash"]);
-  if(b===3)return pick(["qcm","write","flash"]);
-  return pick(["write","write","flash","qcm"]);
+  if(b===2)return pick(["qcm","qcmInv","flash","defWrite"]);
+  if(b===3)return pick(["write","defWrite","flash","qcm"]);
+  return pick(["write","defWrite","defWrite","flash"]);
+}
+
+
+/* ---------- Mots-clés de chaque définition (alternatives séparées par /) ---------- */
+const KW={
+"Abaisser":["étaler/étendre/aplatir","rouleau","épaisseur"],
+"Abricoter":["pinceau","nappage/gelée","brillant/briller"],
+"Appareil":["mélange","ingrédients/substances","avant cuisson/cuit/cuisson"],
+"Apprêt":["fermentation/pousse/gonfler","façonnage/forme","cuisson/four"],
+"Aromates":["herbes/plantes/racines/épices","saveur/parfum/goût/arôme"],
+"Bain-marie":["eau","chaude/chaud","récipient/casserole"],
+"Battre":["fouet","mélanger","volume"],
+"Beurre pommade":["beurre","ramolli/mou","pommade"],
+"Beurrer":["beurre","ustensile/moule","tourage/feuilletage/pâte"],
+"Blanchir":["jaunes","sucre","fouet/fouetter","mousseux/blanc"],
+"Bouler":["boule","rouler","force"],
+"Broyer":["écraser/concasser","poudre"],
+"Brûler":["jaunes","sucre","trop"],
+"Buée":["vapeur","eau","cuisson/four"],
+"Candir":["bonbons","cristaux/cristal","sucre"],
+"Canneler":["rainures","parallèles","couteau/canneleur"],
+"Caraméliser":["caramel","sucre","moule/gâteau"],
+"Chablon":["modèle/pochoir/calibre","formes/découpé"],
+"Chablonner":["couverture/chocolat","fine/couche","intérieurs/découper"],
+"Chemiser":["intérieur","moule","couche"],
+"Chiqueter":["couteau","feuilletage","tour/bord"],
+"Clarifier":["séparer","jaune","blanc"],
+"Coller":["gélatine"],
+"Concasser":["hacher/casser","grossièrement/morceaux"],
+"Concher":["couverture/chocolat","lisse/onctueuse/homogène"],
+"Confire":["fruits","sucre","eau","conserver"],
+"Corner":["corne","racler/garnir/lisser/enlever"],
+"Corps":["élasticité/élastique/résistance","gluten/farine"],
+"Corser":["élasticité/force","saveur/goût"],
+"Coucher":["poche","douille","plaque"],
+"Crémer":["beurre","sucre","mousseux/crémeux"],
+"Décuire":["liquide/eau","sucre","température"],
+"Dessécher":["humidité/eau","évaporer/déshydrater"],
+"Détailler":["découper","abaisse/pâte","emporte-pièce/couteau"],
+"Détrempe":["farine","eau","sel"],
+"Développer":["volume/gonfler/augmentation","cuisson/fermentation"],
+"Dorer":["œuf","pinceau","brillant/briller"],
+"Dresser":["poche/pochoir","forme"],
+"Ébarber":["coulures/bavures","chocolat","démoulage/démouler"],
+"Écumer":["impuretés/mousse/écume","surface"],
+"Émonder":["peau"],
+"Émulsionner":["liquide","disperser/mélanger"],
+"Enrober":["recouvrir/couvrir","entièrement/complètement/tout"],
+"Étuver":["étuve","fermentation/pousse/sécher"],
+"Façonner":["forme","mains/main"],
+"Fariner":["farine","fine/couche"],
+"Ferme":["dure/dur/résistante","blancs/neige"],
+"Fleurer":["farine/fariner","fine/fin/léger"],
+"Foncer":["moule","fond","parois/bords"],
+"Fond":["base","gâteau/génoise/tarte"],
+"Fraser":["lisser/lisse","corps/élastique/élasticité"],
+"Garnir":["remplir"],
+"Glacer":["glaçage/sucre glace/fondant","brillant/briller"],
+"Grainer":["grains/grain","homogénéité/homogène"],
+"Graisser":["graisse/gras","anti-cristallisant/cristaux/masser/glucose"],
+"Homogénéiser":["lisse/homogène","particules/grumeaux"],
+"Huiler":["huile","moule/marbre"],
+"Imbiber":["sirop","humecter/mouiller/moelleux"],
+"Intérieur":["enrober/enrobée","préparation/ganache/praliné"],
+"Lier":["épaissir/épais","farine/jaune/crème"],
+"Lisser":["lisse","homogène/grains"],
+"Lustrer":["brillant/briller"],
+"Macérer":["tremper/baigner","alcool/liquide/sirop","fruits"],
+"Malaxer":["pétrir","main/mains"],
+"Masquer":["recouvrir/couvrir","bords/côtés","surface/dessus/gâteau"],
+"Masser":["sirop/sucre","cristallise/cristaux"],
+"Maturation":["mix","4 °C/repos/mûrir","goût/gustatives"],
+"Mix":["mélange","glace/glacerie"],
+"Monter":["battre/fouetter","volume/léger","assembler"],
+"Mouiller":["eau/liquide"],
+"Moulage":["chocolat","moule"],
+"Mouler":["moule","verser/couler","forme/solidification/durcir"],
+"Mousser":["battre/fouetter","léger/volume"],
+"Mûrir":["reposer/repos","réfrigérateur/frigo/froid","goût"],
+"Nappe":["spatule/cuillère","85/anglaise"],
+"Napper":["recouvrir/couvrir","liquide/semi-liquide"],
+"Panade":["choux","œufs/avant"],
+"Parer":["inutile/enlever/couper","présentation/propre"],
+"Pasteuriser":["chauffer/chaleur","100","conserver/microbes/germes"],
+"Pâte à bombe":["jaunes/œufs","sirop","monter/fouetter"],
+"Pâton":["feuilletée/croissant","tourée/tourage/plis"],
+"Pincer":["pince/doigts","bord/pourtour","tarte"],
+"Piquer":["trous","gonfler"],
+"Pointage":["fermentation/pousse","pétrissage","façonnage"],
+"Pommade":["pommade/mou/crémeux"],
+"Pousse":["volume/gonfler","levure"],
+"Puncher":["imbiber","sirop/alcool","biscuit"],
+"Rayer":["décor/traits","couteau/lame","dorée/dorer"],
+"Réduire":["évaporer/bouillir/ébullition","concentrer/goût","volume"],
+"Relâcher":["ramollir/mou"],
+"Retomber":["redescend/retombe","monté/monter"],
+"Rognures":["chutes","pâte/biscuit","découpe/découper"],
+"Rompre":["rabattre/appuyer","gaz","pointage/fermentation/levure"],
+"Ruban":["épaisse/épais","s'écoule/coule/couler","ruban"],
+"Sabler":["beurre","farine","sec/sable/masser"],
+"Saisir":["chaud/vif","court/vite/rapide"],
+"Sangler":["glace/sorbet/turbiner","refroidir/froid"],
+"Saupoudrer":["poudre","saupoudreuse/trous/parsemer"],
+"Serrer":["blancs","sucre","raffermir/ferme"],
+"Stériliser":["chaleur/chauffer","germes/microbes","100"],
+"Surgeler":["congeler","18","rapidement/vite"],
+"Tabler":["couverture/chocolat","table/marbre","refroidir"],
+"Tamiser":["tamis","grumeaux"],
+"Tant pour tant":["même/égale/moitié","quantité/poids"],
+"Tourer":["plier/plis","beurre","couches"],
+"Travailler":["battre/pétrir/mélanger","temps"],
+"Tremper":["plonger","sirop/couverture/chocolat","baba/bonbons"],
+"Venue":["quantité","recette"],
+"Videler":["replier","bord","garniture"],
+"Zester":["peau/pellicule/zeste","citron/orange","arôme/parfum"]
+};
+function kn(s){return String(s).toLowerCase().replace(/œ/g,"oe").replace(/æ/g,"ae").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim()}
+function stemOf(w){const b=kn(w).replace(/s$/,"");if(b.includes(" "))return b;return b.length>5?b.slice(0,Math.max(5,b.length-2)):b}
+function kwHit(alt,text,toks){const st=stemOf(alt);if(!st)return false;if(st.includes(" "))return (" "+text+" ").includes(" "+st);
+  return toks.some(t=>t.startsWith(st)||(st.length>=5&&t.length>=st.length&&lev(t.slice(0,st.length),st)<=1))}
+function kwCheck(w,answer){const text=kn(answer),toks=text.split(" ").filter(Boolean);
+  return (KW[w.m]||[]).map(k=>{const alts=k.split("/");return{label:alts[0],ok:alts.some(a=>kwHit(a,text,toks))}})}
+function kwChips(w,cls="key"){const k=KW[w.m]||[];return k.length?`<div class="kws"><span class="small muted" style="font-weight:800">Mots-clés :</span>${k.map(x=>`<span class="kw ${cls}">${esc(x.split("/")[0])}</span>`).join("")}</div>`:""}
+
+/* ---------- Donner la définition (production) ---------- */
+function sDefWrite(s){
+  const w=s.w,ex=!!run.exam;
+  app.innerHTML=`<section class="lesson">${lhead()}${kick(s,ex?"Examen blanc · donne la définition":"Donne la définition")}
+   <div class="wordbig">${esc(w.m)} ${spk(w.m)}</div>
+   <textarea id="da" rows="4" placeholder="Écris la définition avec tes mots…" aria-label="Ta définition" autocapitalize="sentences"></textarea>
+   <p class="small muted">Astuce : touche le micro du clavier pour dicter ta réponse au lieu de l'écrire.${ex?"":" Ce qui compte, ce sont les mots-clés."}</p>
+   <div class="lfoot" style="display:flex;flex-direction:column;gap:8px"><button class="b3" id="chk">Vérifier</button><button class="b3 ghost" id="idk">Je ne sais pas</button></div></section>`;
+  bindQuit();if(!ex)say(w.m);
+  const ta=document.getElementById("da");
+  const go=txt=>{const chk=document.getElementById("chk");if(chk.dataset.done)return;chk.dataset.done=1;closeKeyboard();
+    const res=kwCheck(w,txt),f=res.filter(r=>r.ok).length,n=res.length||1,ratio=f/n;
+    const q=ratio>=.75?2:ratio>=.5?1:0;
+    if(ex)return examRecord(s,q,Math.round(ratio*4)/4,{type:"def",txt,res});
+    const gain=record(s,q);if(q>=1)run.hits[w.m]=(run.hits[w.m]||0)+1;
+    const chips=res.map(r=>`<span class="kw ${r.ok?"on":"off"}">${r.ok?"✓":"✗"} ${esc(r.label)}</span>`).join("");
+    setTimeout(()=>say(w.d),250);
+    showSheet(q>0,`<p class="t">${f} mot${f>1?"s":""}-clé${f>1?"s":""} sur ${n}${q===2?` · +${gain} XP`:q===1?" : ajoute ceux qui manquent la prochaine fois":""}</p><div class="kws">${chips}</div><p class="small" style="margin-top:4px"><b>Définition officielle :</b></p><p class="def">${rich(w.d,null)}</p>${clair(w)}`,advance,"Continuer",q===1?"Presque !":null)};
+  document.getElementById("chk").onclick=()=>{if(ta.value.trim())go(ta.value)};
+  document.getElementById("idk").onclick=()=>go("");
+}
+
+/* ---------- Examen blanc ---------- */
+function startExam(full){
+  const seenW=W.filter(seen);
+  const pool=full?W:seenW;
+  if(!full&&seenW.length<8){toast("Pas encore assez de mots","Fais quelques leçons, ou choisis l'examen complet.","var(--blue)",IC.star);return}
+  const sel=shuffle(pool).slice(0,20),h=Math.ceil(sel.length/2);
+  const steps=shuffle(sel.map((w,i)=>({t:i<h?"defWrite":"write",w})));
+  startRun(steps,{exam:true,full,results:[]});
+}
+function examRecord(s,q,pts,info){
+  answer(s.w,q);run.results.push({w:s.w,pts,...info});run.n++;if(pts>=1)run.ok++;
+  run.i++;nextStep();
+}
+function examEnd(r){
+  const n=r.results.length||1,tot=r.results.reduce((a,x)=>a+x.pts,0);
+  const note=Math.round(tot/n*20*2)/2;
+  S.exams=S.exams||[];S.exams.push({d:TODAY(),s:note,full:!!r.full});save();checkRewards(gradeOf(masteredCount()));
+  const secs=Math.round((Date.now()-r.t0)/1000);
+  const msg=note>=16?"Prêt pour le jour J !":note>=12?"Bien ! Encore quelques mots à consolider.":note>=8?"Ça progresse, continue tes révisions.":"Pas de panique, c'est un entraînement : les mots ratés vont revenir.";
+  sfx(note>=12?"done":"tap");if(note>=14)confetti();
+  setTimeout(()=>say(`${String(note).replace(".",",")} sur 20. ${msg}`),500);
+  const best=Math.max(...S.exams.map(e=>e.s));
+  const rows=r.results.map(x=>{const ok=x.pts>=1,part=x.pts>0&&x.pts<1;
+    const pts=String(x.pts).replace(".",",");
+    return `<div class="exrow ${ok?"ok":part?"mid":"ko"}"><div class="exh"><b>${esc(x.w.m)}</b><span class="pill ${ok?"p4":part?"p2":"p1"}">${pts} pt</span></div>
+     ${x.type==="def"?`<div class="kws">${x.res.map(k=>`<span class="kw ${k.ok?"on":"off"}">${k.ok?"✓":"✗"} ${esc(k.label)}</span>`).join("")}</div>`:`<p class="small">${x.txt?`Ta réponse : <b>${esc(x.txt)}</b>`:"Pas de réponse"}${ok?"":` · bonne réponse : <b>${esc(x.w.m)}</b>`}</p>`}
+     ${ok?"":`<p class="small muted">${esc(x.w.d)}</p>`}</div>`}).join("");
+  app.innerHTML=`<section class="endscreen">${mascot(note>=12?"wow":"happy",120)}<h1>${String(note).replace(".",",")} / 20</h1><p>${msg}</p>
+   <div class="kpis"><div class="kpi" style="--c:var(--green)"><small>Réussis</small><b>${r.results.filter(x=>x.pts>=1).length}/${n}</b></div><div class="kpi" style="--c:var(--purple)"><small>Meilleure note</small><b>${String(best).replace(".",",")}</b></div><div class="kpi" style="--c:var(--blue)"><small>Temps</small><b>${Math.floor(secs/60)}:${String(secs%60).padStart(2,"0")}</b></div></div>
+   <div style="width:100%;text-align:left;display:flex;flex-direction:column;gap:8px"><h2>Correction</h2>${rows}</div>
+   <button class="b3" id="go">Terminer</button></section>`;
+  document.getElementById("go").onclick=()=>{window._scrolled=0;render()};
+}
+
+/* ---------- Sauvegarde ---------- */
+function backupCode(){return "LEX1."+btoa(unescape(encodeURIComponent(JSON.stringify(S))))}
+function readCode(c){c=String(c).trim().replace(/\s+/g,"");if(!c.startsWith("LEX1."))throw 0;const o=JSON.parse(decodeURIComponent(escape(atob(c.slice(5)))));if(!o||typeof o.cards!=="object")throw 0;return o}
+function copyText(txt,ta){try{navigator.clipboard.writeText(txt).then(()=>toast("Copié !","Colle-le dans WhatsApp ou tes notes.","var(--green)",IC.check),()=>sel());}catch(e){sel()}
+  function sel(){if(ta){ta.focus();ta.select();try{document.execCommand("copy");toast("Copié !","Colle-le dans WhatsApp ou tes notes.","var(--green)",IC.check)}catch(e){toast("Sélectionne le texte","Puis Copier.","var(--blue)",IC.pen)}}}}
+function shareText(title,txt,ta){if(navigator.share){navigator.share({title,text:txt}).catch(()=>{})}else copyText(txt,ta)}
+function rBackup(){
+  nav.hidden=true;const code=backupCode();S.lastBackup=TODAY();save();
+  app.innerHTML=`<section class="lesson"><div class="lhead"><button class="x" id="bk" aria-label="Retour">${IC.x}</button><h2>Sauvegarde</h2></div>
+   <section class="panel"><h2>1. Sauvegarder</h2>
+    <p class="small">Ce code contient toute ta progression. Envoie-le à maman sur WhatsApp (ou garde-le dans tes Notes). Refais-le chaque semaine.</p>
+    <textarea id="bc" rows="4" readonly>${esc(code)}</textarea>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="b3 blue smallbtn" id="cp" style="width:100%">Copier</button><button class="b3 smallbtn" id="sh" style="width:100%">Envoyer</button></div></section>
+   <section class="panel"><h2>2. Restaurer</h2>
+    <p class="small">Nouveau téléphone ou progression effacée ? Colle ton dernier code ici.</p>
+    <textarea id="rc" rows="4" placeholder="Colle le code LEX1.…"></textarea>
+    <button class="b3 orange" id="rs">Restaurer ma progression</button><p class="small" id="rmsg"></p></section></section>`;
+  document.getElementById("bk").onclick=()=>{tab="profile";render()};
+  const bc=document.getElementById("bc");
+  document.getElementById("cp").onclick=()=>copyText(code,bc);
+  document.getElementById("sh").onclick=()=>shareText("Sauvegarde Lexique",code,bc);
+  const rs=document.getElementById("rs");
+  rs.onclick=()=>{const m=document.getElementById("rmsg");let o;try{o=readCode(document.getElementById("rc").value)}catch(e){m.innerHTML='<span class="t" style="color:var(--red-ink)">Ce code n\'est pas valide. Vérifie qu\'il est complet.</span>';return}
+    if(!rs.dataset.c){rs.dataset.c=1;rs.textContent="Sûr ? Ta progression actuelle sera remplacée";m.textContent=`Code trouvé : ${Object.values(o.cards).filter(c=>c.b>=4).length} mots maîtrisés, ${o.xp||0} XP.`;return}
+    S=Object.assign(JSON.parse(JSON.stringify(DEF)),o);save();sfx("level");toast("Progression restaurée !","Tout est revenu.","var(--green)",IC.check,true);tab="learn";render()};
+}
+
+/* ---------- Bilan pour maman ---------- */
+function weekStats(){
+  const t=TODAY(),days=[];for(let d=t-6;d<=t;d++)days.push({d,n:S.days[d]||0});
+  const played=days.filter(x=>x.n>0).length,answers=days.reduce((a,x)=>a+x.n,0);
+  const mh=S.mh||{};const before=Object.keys(mh).map(Number).filter(d=>d<t-6).sort((a,b)=>b-a)[0];
+  const gained=masteredCount()-(before!==undefined?mh[before]:0);
+  const hard=W.filter(seen).map(w=>({w,e:card(w).n-card(w).ok})).filter(x=>x.e>0).sort((a,b)=>b.e-a.e||B(a.w)-B(b.w)).slice(0,6).map(x=>x.w);
+  const ex=(S.exams||[]).slice(-1)[0],best=(S.exams||[]).length?Math.max(...S.exams.map(e=>e.s)):null;
+  return{days,played,answers,gained,hard,ex,best};
+}
+const dLabel=d=>new Date(Date.now()-(TODAY()-d)*864e5).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short"});
+function bilanText(){const s=weekStats(),k=masteredCount();
+  return `Bilan Lexique pâtisserie (${dLabel(TODAY()-6)} → ${dLabel(TODAY())})
+Jours joués : ${s.played}/7 · Série : ${streak()} j · Total : ${totalDays()} jours
+Mots maîtrisés : ${k}/${N} (+${s.gained} cette semaine) · Grade : ${GRADES[gradeOf(k)].n}
+Réponses cette semaine : ${s.answers}
+${s.ex?`Dernier examen blanc : ${String(s.ex.s).replace(".",",")}/20 (meilleur : ${String(s.best).replace(".",",")})`:"Pas encore d'examen blanc"}
+${s.hard.length?"Mots à retravailler : "+s.hard.map(w=>w.m).join(", "):"Aucun mot difficile pour l'instant"}`}
+function rBilan(){
+  nav.hidden=true;const s=weekStats(),k=masteredCount(),g=gradeOf(k);
+  app.innerHTML=`<section class="lesson"><div class="lhead"><button class="x" id="bk" aria-label="Retour">${IC.x}</button><h2>Bilan de la semaine</h2></div>
+   <p class="muted small">${dLabel(TODAY()-6)} → ${dLabel(TODAY())}</p>
+   <div class="kpis"><div class="kpi" style="--c:var(--orange)"><small>Jours joués</small><b>${s.played}/7</b></div><div class="kpi" style="--c:var(--green)"><small>Maîtrisés</small><b>${k}/${N}</b></div><div class="kpi" style="--c:var(--blue)"><small>Réponses</small><b>${s.answers}</b></div></div>
+   <div class="wk">${s.days.map(x=>`<div><span class="cd ${x.n?"on":""}">${x.n?IC.fire:""}</span><small>${new Date(Date.now()-(TODAY()-x.d)*864e5).toLocaleDateString("fr-FR",{weekday:"narrow"})}</small><small class="muted">${x.n||""}</small></div>`).join("")}</div>
+   <section class="panel"><p><b>+${s.gained}</b> mot${s.gained>1?"s":""} maîtrisé${s.gained>1?"s":""} cette semaine · grade <b>${esc(GRADES[g].n)}</b></p>
+    <p>Série : <b>${streak()} jour${streak()>1?"s":""}</b> · ${totalDays()} jours de connexion au total</p>
+    <p>${s.ex?`Dernier examen blanc : <b>${String(s.ex.s).replace(".",",")}/20</b> · meilleur : ${String(s.best).replace(".",",")}/20`:"Pas encore d'examen blanc cette fois-ci."}</p></section>
+   <section class="panel"><h2>Mots à retravailler</h2>${s.hard.length?`<div class="kws">${s.hard.map(w=>`<span class="kw off">${esc(w.m)}</span>`).join("")}</div>`:`<p class="small muted">Aucun pour l'instant.</p>`}</section>
+   <textarea id="bt" rows="3" readonly hidden>${esc(bilanText())}</textarea>
+   <button class="b3" id="send">Envoyer le bilan à maman</button>
+   <p class="small muted" style="text-align:center">Tu peux aussi faire une capture d'écran de cette page.</p></section>`;
+  document.getElementById("bk").onclick=()=>{tab="profile";render()};
+  document.getElementById("send").onclick=()=>{const ta=document.getElementById("bt");ta.hidden=false;shareText("Bilan Lexique",bilanText(),ta)};
 }
 
 /* ---------- Moteur de leçon ---------- */
@@ -808,44 +1087,51 @@ function lhead(){const p=run.i/run.total;
   return `<div class="lhead"><button class="x" id="quit" aria-label="Quitter">${IC.x}</button><div class="lbar"><i style="width:${p*100}%"></i></div>${combo>=3?`<span class="combo">${IC.fire.replace('<svg','<svg width="18" height="18" style="vertical-align:-3px"')} ${combo}</span>`:""}</div>`}
 function bindQuit(){document.getElementById("quit").onclick=()=>{stopTimers();hideSheet();run=null;render()}}
 function nextStep(){
-  hideSheet();
+  hideSheet();closeKeyboard();
   if(run.i>=run.steps.length)return finishRun();
   const s=run.steps[run.i];const t=typeFor(s,run);
-  ({intro:sIntro,qcm:sQcm,qcmInv:sQcmInv,write:sWrite,pairs:sPairs,flash:sFlash})[t](s);
+  ({intro:sIntro,qcm:sQcm,qcmInv:sQcmInv,write:sWrite,pairs:sPairs,flash:sFlash,defWrite:sDefWrite})[t](s);
   window.scrollTo(0,0);
 }
 function advance(){run.i++;nextStep()}
 function requeue(s){const back={...s,t:s.t==="intro"?"qcm":s.t};run.steps.push(back);run.total=run.steps.length}
 function record(s,q){
   const gain=answer(s.w,q);run.xp+=gain;run.n++;
-  if(q===2){run.ok++;run.hits[s.w.m]=(run.hits[s.w.m]||0)+1}else{run.mist++;requeue(s)}
+  if(q===2){run.ok++;run.hits[s.w.m]=(run.hits[s.w.m]||0)+1}else{run.mist++;run.req=run.req||{};if(!run.req[s.w.m]){run.req[s.w.m]=1;requeue(s)}}
   return gain;
 }
 
-const OK_T=["Excellent !","Bien joué !","Parfait !","Super !","Bravo !","Exact !","Comme un chef !","Nickel !"];
-function showSheet(ok,inner,onNext,label="Continuer"){
-  sfx(ok?"ok":"ko");
-  const sh=document.getElementById("sheet");sh.className="sheet "+(ok?"ok":"ko");
-  document.getElementById("sheetIn").innerHTML=`<h3>${ok?IC.check:IC.x}${ok?pick(OK_T):"Pas tout à fait"}</h3><div class="scroll">${inner}</div><button class="b3 ${ok?"":"red"}" id="cont">${label}</button>`;
+const OK_T=["Excellent !","Bien joué !","Parfait !","Super !","Bravo !","Exact !","Comme un chef !","Nickel !","Trop fort !","Impeccable !","C'est ça !","Tu gères !"];
+const KO_T=["Pas tout à fait","Presque !","Pas grave !","On y est presque"];
+const KO_SUB=["Se tromper puis voir la réponse, c'est ce qui grave le mot.","Il reviendra bientôt, tu l'auras la prochaine fois.","Chaque erreur t'apprend quelque chose.","Lis bien l'explication, puis continue !"];
+function comboLine(){const m={3:"3 d'affilée, tu es lancé !",5:"5 d'affilée, tu es en feu !",8:"8 d'affilée, incroyable !",10:"10 d'affilée ! Chouquette n'en revient pas !",15:"15 d'affilée, niveau chef pâtissier !",20:"20 d'affilée, légendaire !"};return m[combo]||""}
+function closeKeyboard(){const a=document.activeElement;if(a&&a.blur&&a!==document.body)a.blur();setTimeout(()=>window.scrollTo(0,0),50)}
+function showSheet(ok,inner,onNext,label="Continuer",title=null){
+  sfx(ok?"ok":"ko");closeKeyboard();
+  const sh=document.getElementById("sheet");sh.hidden=false;sh.className="sheet "+(ok?"ok":"ko");
+  const cl=ok?comboLine():"";
+  document.getElementById("sheetIn").innerHTML=`<h3>${ok?IC.check:IC.x}${title||(ok?pick(OK_T):pick(KO_T))}</h3><div class="scroll">${cl?`<p class="t" style="font-weight:900">${cl}</p>`:""}${ok?"":`<p class="t">${pick(KO_SUB)}</p>`}${inner}</div><button class="b3 ${ok?"":"red"}" id="cont">${label}</button>`;
   requestAnimationFrame(()=>sh.classList.add("show"));
-  const b=document.getElementById("cont");b.onclick=()=>{hideSheet();onNext()};setTimeout(()=>b.focus(),60);
+  const b=document.getElementById("cont");let used=false;
+  b.onclick=()=>{if(used)return;used=true;hideSheet();onNext()};
 }
-function hideSheet(){const sh=document.getElementById("sheet");sh.classList.remove("show")}
+function hideSheet(){const sh=document.getElementById("sheet");sh.classList.remove("show");sh.hidden=true;document.getElementById("sheetIn").innerHTML=""}
 function spk(w){return `<button class="spk" data-say="${esc(w)}" aria-label="Écouter">${IC.sound}</button>`}
 function vid(m){return `<a class="vid" href="https://www.youtube.com/results?search_query=${encodeURIComponent("pâtisserie "+m+" technique")}" target="_blank" rel="noopener">${IC.play}Voir le geste en vidéo</a>`}
-document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b)say(b.dataset.say)});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b)sayAlways(b.dataset.say)});
+function spkDef(d){return `<button class="spk spk-s" data-say="${esc(d)}" aria-label="Écouter la définition">${IC.sound}</button>`}
 function kick(s,label){return `<span class="kicker ${s.rev?"rev":""}">${s.rev?IC.bolt.replace('<svg','<svg width="16" height="16"')+" Révision d'un ancien mot":label}</span>`}
-function feedback(w,ok,extra=""){return `${extra}${ok?"":`<p class="t" style="font-weight:900">Réponse : ${esc(w.m)}</p><p class="def">${rich(w.d,null)}</p>`}${clair(w)}${vid(w.m)}`}
+function feedback(w,ok,extra=""){setTimeout(()=>say(ok?w.m:"La bonne réponse : "+w.m),250);return `${extra}${ok?"":`<p class="t" style="font-weight:900">Réponse : ${esc(w.m)}</p><p class="def">${rich(w.d,null)}</p>`}${clair(w)}${vid(w.m)}`}
 
 function sIntro(s){
   const w=s.w;
   app.innerHTML=`<section class="lesson">${lhead()}
    ${kick(s,"Nouveau mot")}
    <div class="speech"><div class="wiggle">${mascot("wow",96)}</div><div class="say"><div class="wordbig">${esc(w.m)} ${spk(w.m)}</div></div></div>
-   <div class="def">${rich(w.d,null)}</div>${clair(w)}${vid(w.m)}
-   <p class="small muted">Lis-le à voix haute et imagine le geste. Les mots soulignés s'expliquent si tu les touches.</p>
+   <div class="def">${rich(w.d,null)} ${spkDef(w.d)}</div>${kwChips(w)}${clair(w)}${vid(w.m)}
+   <p class="small muted">Répète-le à voix haute et imagine le geste. Les mots soulignés s'expliquent si tu les touches.</p>
    <div class="lfoot"><button class="b3" id="go">J'ai compris</button></div></section>`;
-  bindQuit();say(w.m);
+  bindQuit();say(w.m);say(w.d,true);
   document.getElementById("go").onclick=()=>{sfx("tap");run.i++;run.total=Math.max(run.total,run.steps.length);nextStep()};
 }
 function distractors(w,n=3){
@@ -871,26 +1157,28 @@ function choose(s,opts,correct,prompt,one){
 }
 function sQcm(s){
   const w=s.w,opts=shuffle([w.m,...distractors(w)]).map(m=>({m,label:m}));
-  choose(s,opts,w.m,`<p class="prompt">Quel mot correspond ?</p><div class="speech"><div>${mascot("happy",96)}</div><div class="say def">${rich(w.d,w)}</div></div>`,false);
+  choose(s,opts,w.m,`<p class="prompt">Quel mot correspond ? ${spkDef(w.d)}</p><div class="speech"><div>${mascot("happy",96)}</div><div class="say def">${rich(w.d,w)}</div></div>`,false);
 }
 function sQcmInv(s){
   const w=s.w,opts=shuffle([w.m,...distractors(w,2)]).map(m=>({m,label:byM[m].d}));
-  choose(s,opts,w.m,`<p class="prompt">Que veut dire ce mot ?</p><div class="wordbig">${esc(w.m)} ${spk(w.m)}</div>`,true);
+  choose(s,opts,w.m,`<p class="prompt">Que veut dire ce mot ?</p><div class="wordbig">${esc(w.m)} ${spk(w.m)}</div>`,true);say(w.m);
 }
 function sWrite(s){
-  const w=s.w;let hint=0;
-  app.innerHTML=`<section class="lesson">${lhead()}${kick(s,"Écris le mot")}
+  const w=s.w,ex=!!run.exam;let hint=0;
+  app.innerHTML=`<section class="lesson">${lhead()}${kick(s,ex?"Examen blanc · écris le mot":"Écris le mot")}
    <div class="speech"><div>${mascot("happy",96)}</div><div class="say def">${rich(w.d,w)}</div></div>
    <form id="wf"><input type="text" id="wi" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Tape le mot…" aria-label="Ta réponse"></form>
-   <button class="hintbtn" id="hint">Indice (${w.m.length} lettres)</button><p class="small muted" id="hv"></p>
-   <div class="lfoot"><button class="b3" id="chk">Vérifier</button></div></section>`;
-  bindQuit();const inp=document.getElementById("wi");inp.focus();
-  document.getElementById("hint").onclick=()=>{hint=Math.min(hint+1,3);const k=Math.ceil(w.m.length*hint/4);
+   ${ex?"":`<button class="hintbtn" id="hint">Indice (${w.m.length} lettres)</button><p class="small muted" id="hv"></p>`}
+   <div class="lfoot" style="display:flex;flex-direction:column;gap:8px"><button class="b3" id="chk">Vérifier</button>${ex?`<button class="b3 ghost" id="skip">Je ne sais pas</button>`:""}</div></section>`;
+  bindQuit();const inp=document.getElementById("wi");
+  if(ex){document.getElementById("skip").onclick=()=>{examRecord(s,0,0,{type:"word",txt:""})}}
+  else document.getElementById("hint").onclick=()=>{hint=Math.min(hint+1,3);const k=Math.ceil(w.m.length*hint/4);
     document.getElementById("hv").textContent="Ça commence par : "+w.m.slice(0,k)+"…";inp.focus()};
   const check=e=>{if(e)e.preventDefault();const chk=document.getElementById("chk");if(chk.dataset.done||!inp.value.trim())return;chk.dataset.done=1;
     const a=norm(inp.value),b=norm(w.m),d=lev(a,b);
     const exact=a===b,typo=!exact&&d===1&&b.length>=6;
     const ok=exact||typo;const q=ok?(hint?1:2):0;
+    if(ex){closeKeyboard();return examRecord(s,q,ok?1:0,{type:"word",txt:inp.value})}
     const gain=record(s,q);if(q===2){S.writeOk++;bump("write");checkRewards(gradeOf(masteredCount()))}
     if(q===1){run.hits[w.m]=(run.hits[w.m]||0)+1}
     const msg=typo?`<p class="t">Presque parfait, attention à l'orthographe : <b>${esc(w.m)}</b></p>`:ok?`<p class="t">${esc(w.m)} · +${gain} XP${hint?" (avec indice)":""}</p>`:`<p class="small">Tu as écrit : <b>${esc(inp.value)}</b></p>`;
@@ -900,13 +1188,13 @@ function sWrite(s){
 function sFlash(s){
   const w=s.w,inv=B(w)>=2&&Math.random()<.5;
   app.innerHTML=`<section class="lesson">${lhead()}${kick(s,"Carte mémoire")}
-   <p class="prompt">${inv?"Quel est le mot ?":"Que veut dire ce mot ?"}</p>
+   <p class="prompt">${inv?"Quel est le mot ?":"Que veut dire ce mot ?"} ${inv?spkDef(w.d):""}</p>
    ${inv?`<div class="speech"><div>${mascot("happy",96)}</div><div class="say def">${rich(w.d,w)}</div></div>`:`<div class="wordbig">${esc(w.m)} ${spk(w.m)}</div>`}
    <p class="small muted">Dis la réponse à voix haute AVANT de retourner la carte. C'est l'effort de chercher qui fait retenir.</p>
-   <div id="back" hidden style="display:flex;flex-direction:column;gap:10px;border-top:2px dashed var(--line);padding-top:14px">${inv?`<div class="wordbig">${esc(w.m)} ${spk(w.m)}</div>`:""}<div class="def">${rich(w.d,null)}</div>${clair(w)}${vid(w.m)}</div>
+   <div id="back" hidden style="display:flex;flex-direction:column;gap:10px;border-top:2px dashed var(--line);padding-top:14px">${inv?`<div class="wordbig">${esc(w.m)} ${spk(w.m)}</div>`:""}<div class="def">${rich(w.d,null)}</div>${kwChips(w)}${clair(w)}${vid(w.m)}</div>
    <div class="lfoot" id="act"><button class="b3 blue" id="flip">Retourner la carte</button></div></section>`;
-  bindQuit();
-  document.getElementById("flip").onclick=()=>{sfx("tap");const bk=document.getElementById("back");bk.hidden=false;if(inv)say(w.m);
+  bindQuit();if(!inv)say(w.m);
+  document.getElementById("flip").onclick=()=>{sfx("tap");const bk=document.getElementById("back");bk.hidden=false;if(inv)say(w.m);else say(w.d);
     document.getElementById("act").innerHTML=`<p class="small muted" style="margin-bottom:8px;text-align:center">Sois honnête avec toi-même :</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><button class="b3 red smallbtn" data-r="0" style="width:100%">Pas su</button><button class="b3 orange smallbtn" data-r="1" style="width:100%">À peu près</button><button class="b3 smallbtn" data-r="2" style="width:100%">Je savais</button></div>`;
     document.getElementById("act").onclick=e=>{const r=e.target.closest("[data-r]");if(!r)return;const q=+r.dataset.r;
       record(s,q);sfx(q===2?"ok":q===1?"tap":"ko");
@@ -930,6 +1218,7 @@ function sPairs(s){
 }
 function finishRun(){
   stopTimers();hideSheet();
+  if(run.exam){const r=run;run=null;return examEnd(r)}
   const r=run;run=null;const acc=r.n?Math.round(r.ok/r.n*100):100;const secs=Math.round((Date.now()-r.t0)/1000);
   const perfect=r.mist===0&&r.n>0;
   if(r.node){const first=!S.done[r.node.id];S.done[r.node.id]=(S.done[r.node.id]||0)+1;bump("lessons");
@@ -938,19 +1227,32 @@ function finishRun(){
   if(r.kind==="review")bump("review");
   save();checkRewards(gradeOf(masteredCount()));
   sfx("done");confetti();
+  const today=S.days[TODAY()]||0,firstToday=S.streakShown!==TODAY();S.streakShown=TODAY();save();
+  const st=streak(),due=W.filter(w=>seen(w)&&card(w).due<=TODAY()).length,ni=nextNodeIndex();
   const title=perfect?"Leçon parfaite !":acc>=80?"Leçon terminée !":"Bien joué, tu progresses !";
-  app.innerHTML=`<section class="endscreen">${mascot("wow",150)}<h1>${title}</h1>
-   <p class="muted">${perfect?"Zéro faute. Chouquette est fière de toi.":r.mist?"Les mots ratés reviendront bientôt : c'est comme ça qu'on les retient.":""}</p>
+  const push=today<GOAL?`Plus que <b>${GOAL-today} réponses</b> pour ton objectif du jour. Une autre leçon ?`
+    :today<GOAL2?`Objectif rempli ! Encore <b>${GOAL2-today}</b> pour le super objectif (+15 gemmes).`:"Super objectif rempli ! Tu es une machine.";
+  app.innerHTML=`<section class="endscreen">${mascot("wow",130)}<h1>${title}</h1>
+   <p class="muted">${perfect?"Zéro faute. Chouquette est fière de toi.":r.mist?"Les mots ratés reviendront bientôt : c'est comme ça qu'on les retient.":"Continue comme ça !"}</p>
    <div class="kpis">
     <div class="kpi" style="--c:var(--yellow-d)"><small>Total XP</small><b>${r.xp}</b></div>
     <div class="kpi" style="--c:var(--green)"><small>${acc>=90?"Génial":"Précision"}</small><b>${acc} %</b></div>
     <div class="kpi" style="--c:var(--blue)"><small>Temps</small><b>${Math.floor(secs/60)}:${String(secs%60).padStart(2,"0")}</b></div>
    </div>
-   <p><b>${masteredCount()} / ${N}</b> mots maîtrisés</p>
-   <button class="b3" id="go">Continuer</button></section>`;
+   <div class="streakbox"><span class="f">${IC.fire.replace('<svg','<svg width="46" height="46"')}</span><span><b>${st} jour${st>1?"s":""} d'affilée</b><br><span class="small muted">${firstToday?"Série prolongée ! Reviens demain pour la garder.":"Ta série est assurée pour aujourd'hui."}</span></span></div>
+   <p><b>${masteredCount()} / ${N}</b> mots maîtrisés · ${push}</p>
+   ${ni>=0?`<button class="b3" id="nextL">Leçon suivante</button>`:""}
+   ${due?`<button class="b3 orange" id="revL">Réviser ${due} mot${due>1?"s":""}</button>`:""}
+   <button class="b3 ghost" id="go">Plus tard</button></section>`;
+  if(firstToday)setTimeout(()=>say(`Bravo ! ${st} jour${st>1?"s":""} d'affilée !`),600);else setTimeout(()=>say(pick(["Bravo !","Super travail !","Bien joué !"])),600);
   document.getElementById("go").onclick=()=>{window._scrolled=0;render()};
+  const nl=document.getElementById("nextL");if(nl)nl.onclick=()=>startNode(NODES[ni]);
+  const rl=document.getElementById("revL");if(rl)rl.onclick=()=>startReview();
 }
 
+function startReview(){const ws=shuffle(W.filter(w=>seen(w)&&card(w).due<=TODAY())).sort((a,b)=>B(a)-B(b)).slice(0,15);
+  const list=ws.length?ws:circular(10);startRun(list.map(w=>({t:"auto",w,rev:true})),{kind:"review"})}
+function nextNodeIndex(){return NODES.findIndex((n,i)=>nodeOpen(i)&&!nodeDone(n))}
 /* ---------- Entraîner ---------- */
 function rTrain(){
   const due=W.filter(w=>seen(w)&&card(w).due<=TODAY()).length;
@@ -961,6 +1263,9 @@ function rTrain(){
    <div class="tiles">
     ${tile("review","--orange",IC.bolt,"Révision du jour",due?`${due} mot${due>1?"s":""} à revoir, tous les anciens mots compris`:"Rien à revoir aujourd'hui")}
     ${tile("weak","--red",IC.target,"Mots fragiles",weak?`${weak} mot${weak>1?"s":""} encore difficiles`:"Aucun mot fragile, bravo")}
+    ${tile("exam","--red",IC.trophy,"Examen blanc","20 mots, les 2 sens, note sur 20"+((S.exams||[]).length?" · meilleure : "+String(Math.max(...S.exams.map(e=>e.s))).replace(".",","):""))}
+    ${tile("examfull","--purple",IC.crown,"Examen blanc complet","20 mots tirés parmi les 110, comme le jour J")}
+    ${tile("def","--blue",IC.pen,"Donne la définition","Le mot s'affiche, tu écris ou dictes la définition")}
     ${tile("flash","--pink",IC.cards,"Cartes mémoire","Retrouve la réponse dans ta tête, à voix haute")}
     ${tile("chrono","--purple",IC.clock,"Chrono 60 s","Record : "+S.best.chrono)}
     ${tile("write","--blue",IC.pen,"Dictée inversée","La définition, tu écris le mot")}
@@ -969,9 +1274,11 @@ function rTrain(){
   bindTop();
   app.querySelectorAll(".tile").forEach(b=>b.onclick=()=>{sfx("tap");const t=b.dataset.t;
     const pool=W.filter(seen);if(!pool.length){toast("Pas encore de mots vus","Fais d'abord une leçon dans Apprendre.","var(--blue)",IC.star);return}
-    if(t==="review"){const ws=shuffle(W.filter(w=>seen(w)&&card(w).due<=TODAY())).sort((a,b)=>B(a)-B(b)).slice(0,15);
-      const list=ws.length?ws:circular(10);startRun(list.map(w=>({t:"auto",w,rev:true})),{kind:"review"})}
+    if(t==="review")startReview();
     if(t==="weak"){const ws=shuffle(W.filter(w=>seen(w)&&B(w)<=2)).slice(0,12);startRun((ws.length?ws:circular(10)).map(w=>({t:"auto",w})))}
+    if(t==="exam")return startExam(false);
+    if(t==="examfull")return startExam(true);
+    if(t==="def")startRun(circular(8).map(w=>({t:"defWrite",w})));
     if(t==="flash")startRun(circular(12).map(w=>({t:"flash",w})));
     if(t==="write")startRun(circular(10).map(w=>({t:"write",w})));
     if(t==="pairs"){const ws=circular(15);startRun([0,1,2].map(i=>({t:"pairs",ws:ws.slice(i*5,i*5+5)})).filter(s=>s.ws.length>=3))}
@@ -1030,7 +1337,7 @@ function rQuests(){
    </section>
    <section class="panel">${calendar()}</section>
    <section class="panel"><h2>Quêtes du jour</h2>
-    ${[{n:`Objectif : ${GOAL} réponses`,goal:GOAL,v:today,id:"goal"},...qs.map(x=>({n:x.n,goal:x.goal,v:q[x.k]||0,id:x.id}))].map(x=>{const v=Math.min(x.v,x.goal);const done=v>=x.goal;
+    ${[{n:`Objectif : ${GOAL} réponses`,goal:GOAL,v:today,id:"goal"},{n:`Super objectif : ${GOAL2} réponses (+15 gemmes)`,goal:GOAL2,v:today,id:"goal2"},...qs.map(x=>({n:x.n,goal:x.goal,v:q[x.k]||0,id:x.id}))].map(x=>{const v=Math.min(x.v,x.goal);const done=v>=x.goal;
       return `<div class="quest"><div><b>${esc(x.n)}</b><div class="qbar"><i style="width:${v/x.goal*100}%"></i><span>${v} / ${x.goal}</span></div></div>${chest(done)}</div>`}).join("")}
     <p class="small muted">Chaque quête rapporte 10 gemmes, et les 3 ensemble ouvrent un coffre de 20 gemmes. Nouvelles quêtes demain.</p>
    </section>
@@ -1065,7 +1372,9 @@ function rProfile(){
    <section class="panel" style="align-items:center;text-align:center">${mascot(k>=40?"wow":"happy",110)}
     <p class="kicker" style="color:var(--purple-d)">${esc(GRADES[g].n)}</p><p class="big" style="color:var(--green-ink)">${k}<span class="muted" style="font-size:1.3rem"> / ${N}</span></p><p>mots maîtrisés</p>
     <div class="qbar" style="width:100%"><i style="width:${k/N*100}%;background:var(--green)"></i></div>
-    <p class="small muted">${next?`Encore ${next.at-k} mot${next.at-k>1?"s":""} pour devenir ${esc(next.n)}.`:"Grade maximum. Continue les révisions pour tout garder."}</p></section>
+    <p class="small muted">${next?`Encore ${next.at-k} mot${next.at-k>1?"s":""} pour devenir ${esc(next.n)}.`:"Grade maximum. Continue les révisions pour tout garder."}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%"><button class="b3 orange smallbtn" id="toBilan" style="width:100%">Bilan pour maman</button><button class="b3 blue smallbtn" id="toBackup" style="width:100%">Sauvegarde</button></div>
+    ${!S.lastBackup||TODAY()-S.lastBackup>=7?`<p class="small" style="color:var(--orange-d);font-weight:800">${S.lastBackup?"Dernière sauvegarde il y a "+(TODAY()-S.lastBackup)+" jours.":"Pas encore de sauvegarde."} Pense à en faire une !</p>`:""}</section>
    <section class="panel"><h2>Grades</h2><div class="ladder">${GRADES.map((x,i)=>`<div class="rung ${i<g?"on":i===g?"cur":""}"><i>${i+1}</i><span><b>${esc(x.n)}</b><br><small class="muted">${esc(x.d)}</small></span><small>${x.at} mots</small></div>`).join("")}</div></section>
    <section class="panel"><h2>Badges · ${Object.keys(S.badges).filter(id=>BADGES.some(b=>b[0]===id)).length}/${BADGES.length}</h2><div class="badges">${BADGES.map(([id,n,dsc,ic,c])=>`<div class="bd ${S.badges[id]?"on":""}" style="--c:var(${c})"><span class="medal">${S.badges[id]?ic:IC.lock}</span><b>${esc(n)}</b><small>${esc(dsc)}</small></div>`).join("")}</div>
     <p class="small muted">${totalDays()} jours de connexion · série actuelle ${streak()} j · Meilleure série de réponses : ${S.best.combo} · Record Chrono : ${S.best.chrono} · ${S.xp} XP</p></section>
@@ -1075,12 +1384,17 @@ function rProfile(){
     <li><b>On se teste au lieu de relire.</b> Chercher la réponse, même en se trompant, fait retenir bien plus.</li>
     <li><b>Les mots reviennent au bon moment.</b> Raté : il revient dans la leçon. Su : demain, puis 3, 7, 14, 21 jours. Même maîtrisé, un mot revient.</li>
     <li><b>De plus en plus dur.</b> D'abord choisir parmi 3 ou 4 réponses, puis retrouver la réponse de tête (cartes mémoire), puis écrire le mot sans aide.</li>
+    <li><b>On produit la réponse.</b> Écrire ou dicter la définition avec ses mots-clés, c'est l'entraînement le plus proche du contrôle.</li>
     <li><b>On mélange.</b> Chaque leçon glisse d'anciens mots, et les fausses réponses sont des mots qui se ressemblent.</li>
     <li><b>Un peu chaque jour.</b> 10 à 15 minutes. La série et les quêtes sont là pour ça.</li></ol></section>
    <section class="panel"><h2>Tous les mots</h2><div class="wl">${W.slice().sort((a,b)=>B(a)-B(b)||a.m.localeCompare(b.m)).map(w=>`<div class="wi"><span><b>${esc(w.m)}</b><br><small>${nextLabel(w)}</small></span><span class="pill p${B(w)}">${STATE[B(w)]}</span></div>`).join("")}</div></section>
-   <section class="panel"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>Sons</b><button class="chip" id="snd" aria-pressed="${S.sound}">${S.sound?"Activés":"Coupés"}</button></div>
+   <section class="panel"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>Voix (lecture des mots)</b><button class="chip" id="voi" aria-pressed="${S.voice!==false}">${S.voice!==false?"Activée":"Coupée"}</button></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>Sons</b><button class="chip" id="snd" aria-pressed="${S.sound}">${S.sound?"Activés":"Coupés"}</button></div>
     <p class="small muted">La progression est enregistrée sur ce téléphone. <button class="linkbtn" id="rst">Tout remettre à zéro</button></p></section>`;
   bindTop();
+  document.getElementById("toBilan").onclick=()=>{tab="bilan";render()};
+  document.getElementById("toBackup").onclick=()=>{tab="backup";render()};
+  document.getElementById("voi").onclick=()=>{S.voice=S.voice===false;save();rProfile()};
   document.getElementById("snd").onclick=()=>{S.sound=!S.sound;save();rProfile()};
   document.getElementById("rst").onclick=function(){if(this.dataset.c){S=JSON.parse(JSON.stringify(DEF));save();rProfile()}else{this.dataset.c=1;this.textContent="Sûr ? Touche encore pour tout effacer"}};
 }
