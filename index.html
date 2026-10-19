@@ -1117,7 +1117,7 @@ function showSheet(ok,inner,onNext,label="Continuer",title=null){
 }
 function hideSheet(){const sh=document.getElementById("sheet");sh.classList.remove("show");sh.hidden=true;document.getElementById("sheetIn").innerHTML=""}
 function spk(w){return `<button class="spk" data-say="${esc(w)}" aria-label="Écouter">${IC.sound}</button>`}
-function vid(m){return `<a class="vid" href="https://www.youtube.com/results?search_query=${encodeURIComponent("pâtisserie "+m+" technique")}" target="_blank" rel="noopener">${IC.play}Voir le geste en vidéo</a>`}
+function vid(m){return ""}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b)sayAlways(b.dataset.say)});
 function spkDef(d){return `<button class="spk spk-s" data-say="${esc(d)}" aria-label="Écouter la définition">${IC.sound}</button>`}
 function kick(s,label){return `<span class="kicker ${s.rev?"rev":""}">${s.rev?IC.bolt.replace('<svg','<svg width="16" height="16"')+" Révision d'un ancien mot":label}</span>`}
